@@ -17,6 +17,7 @@ namespace Arkasis_API.Models
         public String StrNombre2 { get; set; }
         public String DatFechaNacimiento { get; set; }
         public String StrEdoCivil { get; set; }
+        public String IdEdoCivil { get; set; }
         public String StrTelefono { get; set; }
         public String StrCelular { get; set; }
         public String StrCodigoPostal { get; set; }
@@ -53,6 +54,7 @@ namespace Arkasis_API.Models
             StrNombre2 = "";
             DatFechaNacimiento = "";
             StrEdoCivil = "";
+            IdEdoCivil = "";
             StrTelefono = "";
             StrCelular = "";
             StrCodigoPostal = "";
@@ -92,6 +94,7 @@ namespace Arkasis_API.Models
                 StrNombre2 = dataRow["StrNombre2"].ToString();
                 DatFechaNacimiento = dataRow["DatFechaNacimiento"].ToString();
                 StrEdoCivil = dataRow["StrEdoCivil"].ToString();
+                IdEdoCivil = dataRow["IdEdoCivil"].ToString();
                 StrTelefono = dataRow["StrTelefono"].ToString();
                 StrCelular = dataRow["StrCelular"].ToString();
                 StrCodigoPostal = dataRow["StrCodigoPostal"].ToString();

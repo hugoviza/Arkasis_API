@@ -18,7 +18,7 @@ namespace Arkasis_API.Controllers
             ConexionSQL conexionSQL = new ConexionSQL();
             String[] arrayConsultas = new string[1];
             arrayConsultas[0] =
-				$@"SELECT top 50
+				$@"SELECT top 100
 					cteLlave as IdCliente,
 					cteX028 as StrGenero,
 					cteX023 as StrCurp,
@@ -27,6 +27,7 @@ namespace Arkasis_API.Controllers
 					cteX005 as StrNombre1,
 					cteX006 as StrNombre2,
 					cteX030 as DatFechaNacimiento,
+					cteX031 AS IdEdoCivil,
 					cteX031c as StrEdoCivil,
 					cteX020 as StrTelefono,
 					cteX021 as StrCelular,
@@ -83,5 +84,77 @@ namespace Arkasis_API.Controllers
                 return Ok(new { Mensaje = "No se encontraron registros", Success = false });
             }
         }
-    }
+
+
+		[HttpPost("curp")]
+		public IActionResult BuscarClienteByCurp(Cliente cliente)
+		{
+			ConexionSQL conexionSQL = new ConexionSQL();
+			String[] arrayConsultas = new string[1];
+			arrayConsultas[0] =
+				$@"SELECT top 50
+					cteLlave as IdCliente,
+					cteX028 as StrGenero,
+					cteX023 as StrCurp,
+					cteX003 as StrApellidoPaterno,
+					cteX004 as StrApellidoMaterno,
+					cteX005 as StrNombre1,
+					cteX006 as StrNombre2,
+					cteX030 as DatFechaNacimiento,
+					cteX031 AS IdEdoCivil,
+					cteX031c as StrEdoCivil,
+					cteX020 as StrTelefono,
+					cteX021 as StrCelular,
+					cteX019 as StrCodigoPostal,
+					cteX008 as StrDireccion,
+					cteX009 as StrDireccionNumero,
+					cteX010 as StrDireccionNumeroInterno,
+					cteX012 as StrColonia,
+					cteX013 as IdEstado,
+					cteX014 as StrEstado,
+					cteX015 as IdMunicipio,
+					cteX016 as StrMunicipio,
+					cteX041 as StrClaveGrupo,
+					cteX131 as IdActividad,
+					cteX132 as StrDescripcionActividad,
+					cteX033 as StrNumeroElector,
+					cteX034 as StrClaveElector,
+					cteX024 as StrPaisNacimiento,
+					cteX025 as StrEstadoNacimiento,
+					cteX026 as StrNacionalidad,
+					cteX036 as StrEmail,
+					cteX046 as StrNombreConyugue,
+					cteX047 as DatFechaNacimientoConyugue,
+					cteX048 as StrLugarNacimientoConyugue,
+					cteX049 as StrOcupacion
+				FROM arcicte
+				WHERE 
+				cteX023 = '{cliente.StrCurp}'";
+
+			DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
+
+			if (arrayResult != null)
+			{
+				if (arrayResult[0].Rows.Count > 0)
+				{
+					List<Cliente> listaClientes = new List<Cliente>();
+
+					foreach (DataRow row in arrayResult[0].Rows)
+					{
+						listaClientes.Add(new Cliente(row));
+					}
+
+					return Ok(new { Mensaje = "Consulta ok", Success = true, Resultado = listaClientes.ToArray() });
+				}
+				else
+				{
+					return Ok(new { Mensaje = "No se encontraron clientes", Success = false });
+				}
+			}
+			else
+			{
+				return Ok(new { Mensaje = "No se encontraron registros", Success = false });
+			}
+		}
+	}
 }
