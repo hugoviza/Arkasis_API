@@ -124,21 +124,11 @@ namespace Arkasis_API.Controllers
             queries.Clear();
             queries.Add(
                 $@"SELECT 
-                    dbo.arcicte.cteX023 as strCurp,
-                    dbo.arciaux.auxX041 AS Contrato, 
-                    dbo.arciaux.auxX004 AS datFechaMinistracion, 
-                    dbo.arciaux.auxX005 AS datFechaVencimiento, 
-                    dbo.arciaux.auxX017 AS intTotalPagos, 
-                    dbo.arciaux.auxX008 AS dblCapital, 
-                    dbo.arciaux.auxX009 AS dblIntereses, 
-                    dbo.arciaux.auxX009h AS dblSeguro, 
-                    dbo.arciaux.auxX010 AS dblTotal, 
-                    dbo.arciaux.auxX012 AS dblAbono, 
-                    dbo.arciaux.auxX013 AS dblSaldoActual, 
-                    dbo.arciaux.auxX032 AS strProducto 
+                    dbo.arcicte.cteX023 as strCurp
                 FROM dbo.arcicte 
                 INNER JOIN dbo.arciaux ON dbo.arcicte.cteLlave = dbo.arciaux.auxX001 
                 WHERE(dbo.arcicte.cteX023 = '{sd.StrCURP}')
+                AND dbo.arciaux.auxX013 > 0
                 order by datFechaVencimiento desc");
             //Si ya tiene creditos omitimos su registro
             arrayResult = conexionSQL.EjecutarQueries(queries.ToArray());
