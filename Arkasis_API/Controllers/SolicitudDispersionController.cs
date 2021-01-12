@@ -15,22 +15,161 @@ namespace Arkasis_API.Controllers
     [Route("api/dispersion")]
     public class SolicitudDispersionController : Controller
     {
+        class QuerySolicitud
+        {
+            public String StrQuery { get; set; }
+            public String StrMensaje { get; set; }
+
+            public QuerySolicitud(String StrQuery, String StrMensaje)
+            {
+                this.StrQuery = StrQuery;
+                this.StrMensaje = StrMensaje;
+            }
+
+        }
+
         [HttpPost("nueva")]
         public IActionResult GuardarCliente(SolicitudDispersion sd)
         {
+            ConexionSQL conexionSQL = new ConexionSQL();
+            QuerySolicitud querySolicitud = GenerarQueryGuardarSolicitud(conexionSQL, sd);
+            if(querySolicitud.StrMensaje != "")
+            {
+                return Ok(new { Mensaje = querySolicitud.StrMensaje, Success = false });
+            }
+
+            String[] arrayQuery = new String[1];
+            arrayQuery[0] = querySolicitud.StrQuery;
+            DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayQuery);
+
+            if (arrayResult != null)
+            {
+                if (arrayResult[0].Rows.Count > 0)
+                {
+                    return Ok(new { Mensaje = "Guardado correctamente", Success = false });
+                }
+                else
+                {
+                    return Ok(new { Mensaje = "No se ha guardado ", Success = false });
+                }
+            }
+            else
+            {
+                return Ok(new { Mensaje = "No se pudo guardar ", Success = false });
+            }
+        }
+
+        [HttpPost("batch/nueva")]
+        public IActionResult BatchGuardarCliente(List<SolicitudDispersion> listaSolicitudes)
+        {
+            List<EstatusSincronizacionSolicitud> listaResponse = new List<EstatusSincronizacionSolicitud>();
+            ConexionSQL conexionSQL = new ConexionSQL();
+
+            foreach (SolicitudDispersion sd in listaSolicitudes)
+            {
+                QuerySolicitud querySolicitud = GenerarQueryGuardarSolicitud(conexionSQL, sd);
+                if (querySolicitud.StrMensaje != "")
+                {
+                    listaResponse.Add(new EstatusSincronizacionSolicitud(sd.IdSolicitud, false, querySolicitud.StrMensaje));
+                }
+                else
+                {
+                    String[] arrayQuery = new String[1];
+                    arrayQuery[0] = querySolicitud.StrQuery;
+                    DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayQuery);
+
+                    if (arrayResult != null)
+                    {
+                        if (arrayResult[0].Rows.Count > 0)
+                        {
+                            listaResponse.Add(new EstatusSincronizacionSolicitud(sd.IdSolicitud, true, ""));
+                        }
+                        else
+                        {
+                            listaResponse.Add(new EstatusSincronizacionSolicitud(sd.IdSolicitud, false, "Error al guardar"));
+                        }
+                    }
+                    else
+                    {
+                        listaResponse.Add(new EstatusSincronizacionSolicitud(sd.IdSolicitud, false, "Error al guardar"));
+                    }
+                }
+            }
+
+            return Ok(new { Mensaje = "Procesado correctamente", Success = true, Resultado = listaResponse.ToArray()});
+        }
+
+
+        private QuerySolicitud GenerarQueryGuardarSolicitud(ConexionSQL conexionSQL, SolicitudDispersion sd)
+        {
             List<String> queries = new List<string>();
 
+            //Validamos la curp del cliente
+            queries.Add($@"select cteLlave as IdCliente from arcicte where cteX023 like '%{sd.StrCURP}%'");
+            DataTable[] arrayResult = conexionSQL.EjecutarQueries(queries.ToArray());
 
-            //Falta validar si el cliente ya está registrado
-            //Falta validar si el usuario ya tiene alguna solicitud en tramite
+            if (arrayResult != null)
+            {
+                if (arrayResult[0].Rows.Count > 0)
+                {
+                    sd.IdCliente = arrayResult[0].Rows[0]["IdCliente"].ToString();
+                } else if(arrayResult[0].Rows.Count > 1)
+                {
+                    //Si hay mas de un cliente con el mismo curp entonces no guardamos nada
+                    return new QuerySolicitud("", "Curp duplicada en base de datos");
+                }
+            }
 
+            //Validamos que el cliente no tenga algun credito vivo
+            queries.Clear();
+            queries.Add(
+                $@"SELECT 
+                    dbo.arcicte.cteX023 as strCurp,
+                    dbo.arciaux.auxX041 AS Contrato, 
+                    dbo.arciaux.auxX004 AS datFechaMinistracion, 
+                    dbo.arciaux.auxX005 AS datFechaVencimiento, 
+                    dbo.arciaux.auxX017 AS intTotalPagos, 
+                    dbo.arciaux.auxX008 AS dblCapital, 
+                    dbo.arciaux.auxX009 AS dblIntereses, 
+                    dbo.arciaux.auxX009h AS dblSeguro, 
+                    dbo.arciaux.auxX010 AS dblTotal, 
+                    dbo.arciaux.auxX012 AS dblAbono, 
+                    dbo.arciaux.auxX013 AS dblSaldoActual, 
+                    dbo.arciaux.auxX032 AS strProducto 
+                FROM dbo.arcicte 
+                INNER JOIN dbo.arciaux ON dbo.arcicte.cteLlave = dbo.arciaux.auxX001 
+                WHERE(dbo.arcicte.cteX023 = '{sd.StrCURP}')
+                order by datFechaVencimiento desc");
+            //Si ya tiene creditos omitimos su registro
+            arrayResult = conexionSQL.EjecutarQueries(queries.ToArray());
+            if (arrayResult != null)
+            {
+                if (arrayResult[0].Rows.Count > 0)
+                {
+                    return new QuerySolicitud("", "El cliente ya tiene un crédito activo");
+                }
+            }
 
+            //Validamos que no tenga otra solicitud activa
+            queries.Clear();
+            queries.Add($@"select solX004 from arciced where cedLlave = '{sd.IdCliente}' AND solX004 = '1'");
+            arrayResult = conexionSQL.EjecutarQueries(queries.ToArray());
 
+            if (arrayResult != null)
+            {
+                if (arrayResult[0].Rows.Count > 0)
+                {
+                    //Si ya tiene solicitudes en tramite pues no guardamos otra nueva
+                    return new QuerySolicitud("", "El cliente ya tiene una solicitud en trámite");
+                }
+            }
+
+            queries.Clear();
             queries.Add("DECLARE @idGrupo NVARCHAR(50)");
             queries.Add("DECLARE @idCliente NVARCHAR(50)");
             queries.Add("DECLARE @idSolicitudGrupo Integer");
 
-            if(sd.IdCliente == "")
+            if (sd.IdCliente == "")
             {
                 queries.Add($@"insert into arcigru 
                                 (gruX001, gruX003, gruX004, gruX005, gruX005c, gruX007, gruX014, gruX015, gruX016, gruX016c, gruX301, gruX302, gruX303, gruX304) values
@@ -62,32 +201,12 @@ namespace Arkasis_API.Controllers
 
             String queriesString = "";
 
-            foreach(String query in queries)
+            foreach (String query in queries)
             {
                 queriesString += query + "\n";
             }
 
-            String[] arrayQuery = new String[1];
-            arrayQuery[0] = queriesString;
-
-            ConexionSQL conexionSQL = new ConexionSQL();
-            DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayQuery);
-
-            if (arrayResult != null)
-            {
-                if (arrayResult[0].Rows.Count > 0)
-                {
-                    return Ok(new { Mensaje = "Guardado correctamente", Success = false });
-                }
-                else
-                {
-                    return Ok(new { Mensaje = "No se ha guardado ", Success = false });
-                }
-            }
-            else
-            {
-                return Ok(new { Mensaje = "No se pudo guardaar ", Success = false });
-            }
+            return new QuerySolicitud(queriesString, ""); 
         }
     }
 }

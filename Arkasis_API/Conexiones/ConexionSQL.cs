@@ -55,6 +55,7 @@ namespace Arkasis_API.Conexiones
             if (_connection != null && _transaccion != null)
             {
                 _transaccion.Commit();
+                _transaccion = null;
             }
         }
 
