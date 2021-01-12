@@ -31,8 +31,8 @@ namespace Arkasis_API.Controllers
 
             ConexionSQL conexionSQL = new ConexionSQL();
             String[] arrayConsultas = new string[2];
-            arrayConsultas[0] = $"SELECT pswLlave As Usuario, pswX005 AS Password, pswX002 AS Nombre FROM arcipsw WHERE pswLlave = '{usuario.User}';";
-            arrayConsultas[1] = $"SELECT pswLlave As Usuario, pswX005 AS Password, pswX002 AS Nombre FROM arcipsw WHERE pswX005 = '{usuario.Password}' AND pswLlave = '{usuario.User}';";
+            arrayConsultas[0] = $"SELECT pswLlave As Usuario, pswX004 AS Password, pswX002 AS Nombre FROM arcipsw WHERE pswLlave = '{usuario.User}';";
+            arrayConsultas[1] = $"SELECT pswLlave As Usuario, pswX004 AS Password, pswX002 AS Nombre FROM arcipsw WHERE pswX004 = '{usuario.Password}' AND pswLlave = '{usuario.User}';";
             DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
 
             if(arrayResult != null)
