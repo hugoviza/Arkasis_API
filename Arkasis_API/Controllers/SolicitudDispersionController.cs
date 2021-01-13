@@ -142,7 +142,7 @@ namespace Arkasis_API.Controllers
 
             //Validamos que no tenga otra solicitud activa
             queries.Clear();
-            queries.Add($@"select solX004 from arciced where cedLlave = '{sd.IdCliente}' AND solX004 = '1'");
+            queries.Add($@"select solX004 from arciced where cedX023 = '{sd.StrCURP}' AND solX004 = '1'");
             arrayResult = conexionSQL.EjecutarQueries(queries.ToArray());
 
             if (arrayResult != null)
