@@ -175,6 +175,7 @@ namespace Arkasis_API.Controllers
                                 (@idCliente, '{sd.IdSucursal}', '{sd.StrApellidoPaterno}', '{sd.StrApellidoMaterno}', '{sd.StrNombre1}', '{sd.StrNombre2}', '{sd.StrNombreCompleto}', '{sd.StrDomicilio}', '{sd.StrDomicilioNumExt}', '{sd.StrDomicilioNumInt}', '{sd.StrDomicilioColonia}', '{sd.IdDomicilioEstado}', '{sd.StrDomicilioEstado}', '{sd.IdDomicilioMunicipio}', '{sd.StrDomicilioMunicipio}', '{sd.StrDomicilioCodigoPostal}', '{sd.StrTelefono}', '{sd.StrCelular}', '{sd.StrCURP}', '{sd.StrPais}', '{sd.StrEstadoNacimiento}', '{sd.StrNacionalidad}', '{sd.IdGenero}', '{sd.StrGenero}', '{sd.StrFechaNacimiento}', '{sd.IdEstadoCivil}', '{sd.StrEstadoCivil}', '{sd.StrNumeroINE}', '{sd.StrClaveINE}', '{sd.StrEmail}', '{sd.StrOcupacion}', '{sd.StrActividad}', '{sd.StrNombreConyuge}', '{sd.StrFechaNacimientoConyuge}', '{sd.StrLugarNacimientoConyuge}', '{sd.StrOcupacionConyuge}', @idGrupo, '{sd.StrUsuarioPromotor}', GETDATE(), '{sd.StrUsuarioPromotor}', GETDATE())");
                 */
 
+                /*
                 queries.Add($@"insert into arcigru 
                                 (gruX001, gruX003, gruX004, gruX005, gruX005c, gruX007, gruX014, gruX015, gruX016, gruX016c, gruX301, gruX302, gruX303, gruX304) values
                                 ('{sd.IdSucursal}', '{sd.StrNombreCompleto}', '1', '{sd.idPromotor}', '{sd.StrPromotor}', '{sd.StrFechaAlta}', '{sd.IdDomicilioEstado}', '{sd.IdDomicilioMunicipio}', '1', 'INDIVIDUAL', '{sd.StrUsuarioPromotor}', GETDATE(), '{sd.StrUsuarioPromotor}', GETDATE())");
@@ -185,6 +186,10 @@ namespace Arkasis_API.Controllers
                                 (cteX001, cteX003, cteX004, cteX005, cteX006, cteX007, cteX008, cteX009, cteX010, cteX012, cteX013, cteX014, cteX015, cteX016, cteX019, cteX020, cteX021, cteX023, cteX024, cteX025, cteX026, cteX027, cteX028, cteX030, cteX031, cteX031c, cteX033, cteX034, cteX036, cteX037, cteX040, cteX046, cteX047, cteX048, cteX049, cteX041, cteX301, cteX302, cteX303, cteX304 ) values
                                 ('{sd.IdSucursal}', '{sd.StrApellidoPaterno}', '{sd.StrApellidoMaterno}', '{sd.StrNombre1}', '{sd.StrNombre2}', '{sd.StrNombreCompleto}', '{sd.StrDomicilio}', '{sd.StrDomicilioNumExt}', '{sd.StrDomicilioNumInt}', '{sd.StrDomicilioColonia}', '{sd.IdDomicilioEstado}', '{sd.StrDomicilioEstado}', '{sd.IdDomicilioMunicipio}', '{sd.StrDomicilioMunicipio}', '{sd.StrDomicilioCodigoPostal}', '{sd.StrTelefono}', '{sd.StrCelular}', '{sd.StrCURP}', '{sd.StrPais}', '{sd.StrEstadoNacimiento}', '{sd.StrNacionalidad}', '{sd.IdGenero}', '{sd.StrGenero}', '{sd.StrFechaNacimiento}', '{sd.IdEstadoCivil}', '{sd.StrEstadoCivil}', '{sd.StrNumeroINE}', '{sd.StrClaveINE}', '{sd.StrEmail}', '{sd.StrOcupacion}', '{sd.StrActividad}', '{sd.StrNombreConyuge}', '{sd.StrFechaNacimientoConyuge}', '{sd.StrLugarNacimientoConyuge}', '{sd.StrOcupacionConyuge}', @idGrupo, '{sd.StrUsuarioPromotor}', GETDATE(), '{sd.StrUsuarioPromotor}', GETDATE())");
                 queries.Add("SET @idCliente = (SELECT SCOPE_IDENTITY())");
+                */
+
+                queries.Add($@"SET @idCliente = NULL");
+                queries.Add($@"SET @idGrupo = NULL");
             }
             else
             {
