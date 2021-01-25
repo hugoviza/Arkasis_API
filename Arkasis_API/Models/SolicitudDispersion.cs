@@ -55,10 +55,11 @@ namespace Arkasis_API.Models
         public String StrProducto { get; set; }
         public Int16 IntPlazo { get; set; }
         public Int16 IntQuedateCasa { get; set; }
-        public Double DblMontoSolicitado { get; set; }
-        public Double DblMontoAutorizado { get; set; }
+        public Double DblMontoSolicitadoMejoraVivienda { get; set; }
+        public Double DblMontoSolicitadoEquipandoHogar { get; set; }
         public Double DblIngresos { get; set; }
         public Double DblEgresos { get; set; }
+        public String StrCNBV { get; set; }
 
 
         public String StrNombreCompleto { get { return ($@"{StrNombre1} {StrNombre2}").Trim() + $@" {StrApellidoPaterno} {StrApellidoMaterno}"; } }

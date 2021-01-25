@@ -49,10 +49,11 @@ namespace Arkasis_API.Controllers
 					cteX025 as StrEstadoNacimiento,
 					cteX026 as StrNacionalidad,
 					cteX036 as StrEmail,
-					cteX046 as StrNombreConyugue,
-					cteX047 as DatFechaNacimientoConyugue,
-					cteX048 as StrLugarNacimientoConyugue,
-					cteX049 as StrOcupacion
+					cteX046 as StrNombreConyuge,
+					cteX047 as DatFechaNacimientoConyuge,
+					cteX048 as StrLugarNacimientoConyuge,
+					cteX049 as StrOcupacionConyuge,
+					cteX037 as StrOcupacion
 				FROM arcicte
 				WHERE 
 				concat(cteX016, ' ', cteX014)like '%{cliente.StrMunicipio.Replace("'", "%").Replace(" ", "%")}%{cliente.StrEstado.Replace("'", "%").Replace(" ", "%")}%'
@@ -123,10 +124,11 @@ namespace Arkasis_API.Controllers
 					cteX025 as StrEstadoNacimiento,
 					cteX026 as StrNacionalidad,
 					cteX036 as StrEmail,
-					cteX046 as StrNombreConyugue,
-					cteX047 as DatFechaNacimientoConyugue,
-					cteX048 as StrLugarNacimientoConyugue,
-					cteX049 as StrOcupacion
+					cteX046 as StrNombreConyuge,
+					cteX047 as DatFechaNacimientoConyuge,
+					cteX048 as StrLugarNacimientoConyuge,
+					cteX049 as StrOcupacionConyuge,
+					cteX037 as StrOcupacion
 				FROM arcicte
 				WHERE 
 				cteX023 = '{cliente.StrCurp}'";
@@ -149,6 +151,56 @@ namespace Arkasis_API.Controllers
 				else
 				{
 					return Ok(new { Mensaje = "No se encontraron clientes", Success = false });
+				}
+			}
+			else
+			{
+				return Ok(new { Mensaje = "No se encontraron registros", Success = false });
+			}
+		}
+
+		[HttpPost("saldos")]
+		public IActionResult ObtenerSaldos(Cliente cliente)
+        {
+			ConexionSQL conexionSQL = new ConexionSQL();
+			String[] arrayConsultas = new string[1];
+			arrayConsultas[0] =
+				$@"SELECT top  100
+					arcicte.cteX023 as strCurp,
+					arciaux.auxX041 AS strFolioContrato, 
+					arciaux.auxX004 AS datFechaMinistracion, 
+					arciaux.auxX005 AS datFechaVencimiento, 
+					arciaux.auxX017 AS intTotalPagos, 
+					arciaux.auxX008 AS dblCapital,
+					arciaux.auxX009 AS dblIntereses, 
+					arciaux.auxX009h AS dblSeguro, 
+					arciaux.auxX010 AS dblTotal, 
+					arciaux.auxX012 AS dblAbono,
+					arciaux.auxX013 AS dblSaldo,
+					arciaux.auxX032 AS strProducto 
+					FROM 
+					arcicte 
+				INNER JOIN arciaux ON arcicte.cteX023 = arciaux.auxX023x 
+				WHERE (arcicte.cteX023 = '{cliente.StrCurp}')";
+
+			DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
+
+			if (arrayResult != null)
+			{
+				if (arrayResult[0].Rows.Count > 0)
+				{
+					List<SaldoCliente> listaSaldosCliente = new List<SaldoCliente>();
+
+					foreach (DataRow row in arrayResult[0].Rows)
+					{
+						listaSaldosCliente.Add(new SaldoCliente(row));
+					}
+
+					return Ok(new { Mensaje = "Consulta ok", Success = true, Resultado = listaSaldosCliente.ToArray() });
+				}
+				else
+				{
+					return Ok(new { Mensaje = "No se encontraron saldos de cliente", Success = false });
 				}
 			}
 			else

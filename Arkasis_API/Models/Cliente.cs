@@ -38,10 +38,11 @@ namespace Arkasis_API.Models
         public String StrEstadoNacimiento { get; set; }
         public String StrNacionalidad { get; set; }
         public String StrEmail { get; set; }
-        public String StrNombreConyugue { get; set; }
-        public String DatFechaNacimientoConyugue { get; set; }
-        public String StrLugarNacimientoConyugue { get; set; }
+        public String StrNombreConyuge { get; set; }
+        public String DatFechaNacimientoConyuge { get; set; }
+        public String StrLugarNacimientoConyuge { get; set; }
         public String StrOcupacion { get; set; }
+        public String StrOcupacionConyuge { get; set; }
 
         public Cliente()
         {
@@ -75,9 +76,10 @@ namespace Arkasis_API.Models
             StrEstadoNacimiento = "";
             StrNacionalidad = "";
             StrEmail = "";
-            StrNombreConyugue = "";
-            DatFechaNacimientoConyugue = "";
-            StrLugarNacimientoConyugue = "";
+            StrNombreConyuge = "";
+            DatFechaNacimientoConyuge = "";
+            StrLugarNacimientoConyuge = "";
+            StrOcupacionConyuge = "";
             StrOcupacion = "";
         }
 
@@ -115,10 +117,11 @@ namespace Arkasis_API.Models
                 StrEstadoNacimiento = dataRow["StrEstadoNacimiento"].ToString();
                 StrNacionalidad = dataRow["StrNacionalidad"].ToString();
                 StrEmail = dataRow["StrEmail"].ToString();
-                StrNombreConyugue = dataRow["StrNombreConyugue"].ToString();
-                DatFechaNacimientoConyugue = dataRow["DatFechaNacimientoConyugue"].ToString();
-                StrLugarNacimientoConyugue = dataRow["StrLugarNacimientoConyugue"].ToString();
+                StrNombreConyuge = dataRow["StrNombreConyuge"].ToString();
+                DatFechaNacimientoConyuge = dataRow["DatFechaNacimientoConyuge"].ToString();
+                StrLugarNacimientoConyuge = dataRow["StrLugarNacimientoConyuge"].ToString();
                 StrOcupacion = dataRow["StrOcupacion"].ToString();
+                StrOcupacionConyuge = dataRow["StrOcupacionConyuge"].ToString();
             }
         }
     }
