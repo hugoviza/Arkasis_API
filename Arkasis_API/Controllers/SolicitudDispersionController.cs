@@ -159,7 +159,7 @@ namespace Arkasis_API.Controllers
             queries.Add("DECLARE @idCliente NVARCHAR(50)");
             queries.Add("DECLARE @idSolicitudGrupo Integer");
             queries.Add("DECLARE @idCiclo Integer");
-
+            queries.Add("DECLARE @idPagos Integer");
             if (sd.IdCliente == "")
             {
 
@@ -192,12 +192,14 @@ namespace Arkasis_API.Controllers
                 queries.Add($@"SET @idCliente = (select CONCAT('5', RIGHT('00000' + CAST( (max(grmLlave) + 1) AS VARCHAR), 6)) as consecutivo from ARCIGRM)");
                 queries.Add($@"SET @idGrupo = (select CONCAT('5', RIGHT('00000' + CAST( (max(grmLlave) + 1) AS VARCHAR), 6)) as consecutivo from ARCIGRM)");
                 queries.Add($@"SET @idCiclo = '0' ");
+                queries.Add($@"SET @idPagos = {sd.IdCliente} * 2 ");
             }
             else
             {
                 queries.Add($@"SET @idCliente = {sd.IdCliente}");
                 queries.Add($@"SET @idGrupo = (select top 1 cteX041 from arcicte where cteLlave = {sd.IdCliente})");
                 queries.Add($@"SET @idCiclo = (select top 1 gruX009 from arcigru where gruLlave = @idGrupo)");
+                queries.Add($@"SET @idPagos = {sd.IdCliente} * 2 ");
             }
 
             Double montoSolicitado = sd.DblMontoSolicitadoMejoraVivienda + sd.DblMontoSolicitadoEquipandoHogar;
@@ -209,8 +211,8 @@ namespace Arkasis_API.Controllers
                                         : 5);
 
             queries.Add($@"insert into arcigrm
-                                (grmX001, grmX002, grmX003, grmX004, grmX005, grmX006, grmX010, grmX012, grmX018, grmX019, grmX025, grmX036, grmX301, grmX302, grmX303, grmX304, grmX020, grmX021, grmX026, grmX022,grmX007 ) values
-                                ('{sd.IdSucursal}', @idGrupo, '{sd.StrNombreCompleto.ToUpper()}' , '1', '{sd.idPromotor}', '{sd.StrPromotor.ToUpper()}', '{montoSolicitado}', '{sd.IntPlazo}', '1', '1', '{sd.StrFechaAlta}', '{montoSolicitado}', '{sd.StrUsuarioPromotor.ToUpper()}', GETDATE(), '{sd.StrUsuarioPromotor.ToUpper()}', GETDATE(), 'INDIVIDUAL', '{sd.StrFechaAlta}', '{sd.StrFechaAlta}', '{tipoSolicitud}',@idCiclo)");
+                                (grmX001, grmX002, grmX003, grmX004, grmX005, grmX006, grmX010, grmX012, grmX018, grmX019, grmX025, grmX036, grmX301, grmX302, grmX303, grmX304, grmX020, grmX021, grmX026, grmX022,grmX007,grmX011 ) values
+                                ('{sd.IdSucursal}', @idGrupo, '{sd.StrNombreCompleto.ToUpper()}' , '1', '{sd.idPromotor}', '{sd.StrPromotor.ToUpper()}', '{montoSolicitado}', '{sd.IntPlazo}', '1', '1', '{sd.StrFechaAlta}', '{montoSolicitado}', '{sd.StrUsuarioPromotor.ToUpper()}', GETDATE(), '{sd.StrUsuarioPromotor.ToUpper()}', GETDATE(), 'INDIVIDUAL', '{sd.StrFechaAlta}', '{sd.StrFechaAlta}', '{tipoSolicitud}',@idCiclo,@idPagos)");
 
 
             if(sd.DblMontoSolicitadoMejoraVivienda > 0)
