@@ -142,7 +142,7 @@ namespace Arkasis_API.Controllers
 
             //Validamos que no tenga otra solicitud activa
             queries.Clear();
-            queries.Add($@"select solX004 from arciced where cedX023 = '{sd.StrCURP}' AND solX004 = '1'");
+            queries.Add($@"select solX004 from arciced where cedX023 = '{sd.StrCURP}' AND (solX004 = '1' OR solX004 = '2' OR solX004 = '3')");
             arrayResult = conexionSQL.EjecutarQueries(queries.ToArray());
 
             if (arrayResult != null)
@@ -211,8 +211,8 @@ namespace Arkasis_API.Controllers
                                         : 5);
 
             queries.Add($@"insert into arcigrm
-                                (grmX001, grmX002, grmX003, grmX004, grmX005, grmX006, grmX010, grmX012, grmX018, grmX019, grmX025, grmX036, grmX301, grmX302, grmX303, grmX304, grmX020, grmX021, grmX026, grmX022,grmX007,grmX011 ) values
-                                ('{sd.IdSucursal}', @idGrupo, '{sd.StrNombreCompleto.ToUpper()}' , '1', '{sd.idPromotor}', '{sd.StrPromotor.ToUpper()}', '{montoSolicitado}', '{sd.IntPlazo}', '1', '1', '{sd.StrFechaAlta}', '{montoSolicitado}', '{sd.StrUsuarioPromotor.ToUpper()}', GETDATE(), '{sd.StrUsuarioPromotor.ToUpper()}', GETDATE(), 'INDIVIDUAL', '{sd.StrFechaAlta}', '{sd.StrFechaAlta}', '{tipoSolicitud}',@idCiclo,@idPagos)");
+                                (grmX001, grmX002, grmX003, grmX004, grmX005, grmX006, grmX010, grmX012, grmX018, grmX019, grmX025, grmX036, grmX301, grmX302, grmX303, grmX304, grmX020, grmX021, grmX026, grmX022,grmX007,grmX011,grmX075 ) values
+                                ('{sd.IdSucursal}', @idGrupo, '{sd.StrNombreCompleto.ToUpper()}' , '1', '{sd.idPromotor}', '{sd.StrPromotor.ToUpper()}', '{montoSolicitado}', '{sd.IntPlazo}', '1', '1', '{sd.StrFechaAlta}', '{montoSolicitado}', '{sd.StrUsuarioPromotor.ToUpper()}', GETDATE(), '{sd.StrUsuarioPromotor.ToUpper()}', GETDATE(), 'INDIVIDUAL', '{sd.StrFechaAlta}', '{sd.StrFechaAlta}', '{tipoSolicitud}',@idCiclo,@idPagos,'2')");
 
 
             if(sd.DblMontoSolicitadoMejoraVivienda > 0)
