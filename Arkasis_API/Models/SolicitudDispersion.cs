@@ -14,6 +14,7 @@ namespace Arkasis_API.Models
         public String idPromotor { get; set; }
         public String StrUsuarioPromotor { get; set; }
         public String StrPromotor { get; set; }
+        public String IdCordinador { get; set; }
         public String StrCordinador { get; set; }
         public String IdCliente { get; set; }
         public String StrApellidoPaterno { get; set; }
@@ -60,6 +61,16 @@ namespace Arkasis_API.Models
         public Double DblIngresos { get; set; }
         public Double DblEgresos { get; set; }
         public String StrCNBV { get; set; }
+
+        public String StrDomicilio_mejoraVivienda { get; set; }
+        public String StrCodigoPostal_mejoraVivienda { get; set; }
+        public String StrNumExt_mejoraVivienda { get; set; }
+        public String StrNumInt_mejoraVivienda { get; set; }
+        public String StrColonia_mejoraVivienda { get; set; }
+        public String IdEstado_mejoraVivienda { get; set; }
+        public String StrEstado_mejoraVivienda { get; set; }
+        public String IdMunicipio_mejoraVivienda { get; set; }
+        public String StrMunicipio_mejoraVivienda { get; set; }
 
 
         public String StrNombreCompleto { get { return ($@"{StrNombre1} {StrNombre2}").Trim() + $@" {StrApellidoPaterno} {StrApellidoMaterno}"; } }
