@@ -34,7 +34,7 @@ namespace Arkasis_API.Conexiones
                 _connection.Open();
                 _transaccion = null;
             }
-            catch (SqlException e)
+            catch (SqlException)
             {
                 _connection = null;
                 _transaccion = null;
@@ -55,6 +55,15 @@ namespace Arkasis_API.Conexiones
             if (_connection != null && _transaccion != null)
             {
                 _transaccion.Commit();
+                _transaccion = null;
+            }
+        }
+
+        public void Rollback()
+        {
+            if (_connection != null && _transaccion != null)
+            {
+                _transaccion.Rollback();
                 _transaccion = null;
             }
         }
@@ -95,7 +104,11 @@ namespace Arkasis_API.Conexiones
                     return arrayDataTable;
 
                 } catch(SqlException e)
-                { 
+                {
+                    if (_transaccionAutomatica)
+                    {
+                        Rollback();
+                    }
                     return null;
                 }
             } else
