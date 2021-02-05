@@ -208,5 +208,6 @@ namespace Arkasis_API.Controllers
 				return Ok(new { Mensaje = "No se encontraron registros", Success = false });
 			}
 		}
+
 	}
 }
