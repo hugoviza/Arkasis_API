@@ -60,16 +60,16 @@ namespace Arkasis_API.Controllers
                     saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
                     saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
 
-                    return Ok(new { Mensaje = "Guardado correctamente " + querySolicitud.StrQuery, Success = true, Resultado = "1", query = querySolicitud.StrQuery, data = sd });
+                    return Ok(new { Mensaje = "Guardado correctamente", Success = true, Resultado = "1"});
                 }
                 else
                 {
-                    return Ok(new { Mensaje = "No se ha guardado " + querySolicitud.StrQuery, Success = false, query = querySolicitud.StrQuery, data = sd });
+                    return Ok(new { Mensaje = "No se ha guardado", Success = false});
                 }
             }
             else
             {
-                return Ok(new { Mensaje = "No se pudo guardar " , Success = false, query = querySolicitud.StrQuery, data = sd });
+                return Ok(new { Mensaje = "No se pudo guardar", Success = false });
             }
         }
 
@@ -118,6 +118,42 @@ namespace Arkasis_API.Controllers
             }
 
             return Ok(new { Mensaje = "Procesado correctamente", Success = true, Resultado = listaResponse.ToArray()});
+        }
+
+        [HttpPost("resumen-usuario")]
+        public IActionResult ObtenerResumenSolicitudesUsuario(Usuario usuario)
+        {
+            List<String> queries = new List<String>() { 
+                $@"select 
+	                cedX301 as strUsuario, 
+	                sum(case when solX004 = 1 then 1 else 0 end) as IntTotalTramite,
+	                sum(case when solX004 = 2 then 1 else 0 end) as IntTotalAutorizado,
+	                sum(case when solX004 = 3 then 1 else 0 end) as IntTotalRechazado,
+	                sum(case when solX004 = 4 then 1 else 0 end) as IntTotalCancelado,
+	                sum(case when solX004 = 5 then 1 else 0 end) as IntTotalMinistrado,
+	                count(*) IntTotalRegistros
+                from arciced
+                where solX003 > DATEADD(DD, -90, GETDATE()) AND cedX301 = '{usuario.User}'
+                group by cedX301;" };
+
+            ConexionSQL conexionSQL = new ConexionSQL();
+            DataTable[] arrayResult = conexionSQL.EjecutarQueries(queries.ToArray());
+
+            if (arrayResult != null)
+            {
+                if (arrayResult[0].Rows.Count > 0)
+                {
+                    return Ok(new { Mensaje = "Ok", Success = true, Resultado = new ResumenSolicitudes(arrayResult[0].Rows[0]) });
+                }
+                else
+                {
+                    return Ok(new { Mensaje = "No se ha guardado ", Success = false});
+                }
+            }
+            else
+            {
+                return Ok(new { Mensaje = "No se pudo guardar ", Success = false});
+            }
         }
 
 
@@ -296,5 +332,7 @@ namespace Arkasis_API.Controllers
 
             return fileName;
         }
+
+
     }
 }
