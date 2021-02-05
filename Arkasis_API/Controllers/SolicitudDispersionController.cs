@@ -223,7 +223,7 @@ namespace Arkasis_API.Controllers
 
             queries.Add($@"insert into arcigrm
                                 (grmX001, grmX002, grmX003, grmX004, grmX005, grmX006, grmX010, grmX012, grmX018, grmX019, grmX025, grmX036, grmX301, grmX302, grmX303, grmX304, grmX020, grmX021, grmX026, grmX022,grmX007,grmX011,grmX075, grmX005c, grmX006c,grmX076,grmX077,grmX078  ) values
-                                ('{sd.IdSucursal}', @idGrupo, '{sd.StrNombreCompleto.ToUpper()}' , '1', '{sd.idPromotor}', '{sd.StrPromotor.ToUpper()}', '{montoSolicitado}', '{sd.IntPlazo}', '1', '1', '{sd.StrFechaAlta}', '{montoSolicitado}', '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.StrUsuario.ToUpper()}', GETDATE(), 'INDIVIDUAL', '{sd.StrFechaAlta}', '{sd.StrFechaAlta}', '{tipoSolicitud}',@idCiclo,@idPagos,'2', '{sd.IdCordinador}', '{sd.StrCordinador},'{sd.StrReferenciaBancaria}','{sd.StrBanco}','{sd.IntQuedateCasa}')");
+                                ('{sd.IdSucursal}', @idGrupo, '{sd.StrNombreCompleto.ToUpper()}' , '1', '{sd.idPromotor}', '{sd.StrPromotor.ToUpper()}', '{montoSolicitado}', '{sd.IntPlazo}', '1', '1', '{sd.StrFechaAlta}', '{montoSolicitado}', '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.StrUsuario.ToUpper()}', GETDATE(), 'INDIVIDUAL', '{sd.StrFechaAlta}', '{sd.StrFechaAlta}', '{tipoSolicitud}',@idCiclo,@idPagos,'2', '{sd.IdCordinador}', '{sd.StrCordinador}','{sd.StrReferenciaBancaria}','{sd.StrBanco}','{sd.IntQuedateCasa}')");
 
 
             if(sd.DblMontoSolicitadoMejoraVivienda > 0)
