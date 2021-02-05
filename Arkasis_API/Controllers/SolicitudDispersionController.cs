@@ -53,12 +53,12 @@ namespace Arkasis_API.Controllers
             {
                 if (arrayResult[0].Rows.Count > 0)
                 {
-
+                    sd.IdCliente = arrayResult[0].Rows[0]["IdCliente"].ToString();
                     //Save the Byte Array as Image File.
-                    saveImage(sd.StrCURP, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
-                    saveImage(sd.StrCURP, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
-                    saveImage(sd.StrCURP, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
-                    saveImage(sd.StrCURP, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
+                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
+                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
+                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
+                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
 
                     return Ok(new { Mensaje = "Guardado correctamente " + querySolicitud.StrQuery, Success = true, Resultado = "1", query = querySolicitud.StrQuery, data = sd });
                 }
@@ -96,11 +96,12 @@ namespace Arkasis_API.Controllers
                     {
                         if (arrayResult[0].Rows.Count > 0)
                         {
+                            sd.IdCliente = arrayResult[0].Rows[0]["IdCliente"].ToString();
                             //Save the Byte Array as Image File.
-                            saveImage(sd.StrCURP, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
-                            saveImage(sd.StrCURP, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
-                            saveImage(sd.StrCURP, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
-                            saveImage(sd.StrCURP, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
+                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
+                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
+                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
+                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
 
                             listaResponse.Add(new EstatusSincronizacionSolicitud(sd.IdSolicitud, true, ""));
                         }
@@ -243,7 +244,8 @@ namespace Arkasis_API.Controllers
 
 
 
-            queries.Add("SELECT SCOPE_IDENTITY() as idSolicitud");
+            // queries.Add("SELECT SCOPE_IDENTITY() as idSolicitud");
+            queries.Add("SELECT @idCliente AS IdCliente");
 
 
             String queriesString = "";
@@ -277,11 +279,11 @@ namespace Arkasis_API.Controllers
             return queriesString;
         }
 
-        private String saveImage(String Curp, String base64String, String fileName)
+        private String saveImage(String idSucursal, String idCliente, String base64String, String fileName)
         {
             byte[] imageBytes = Convert.FromBase64String(base64String);
 
-            string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "Images", Curp);
+            string directoryPath = Path.Combine("/ArkasisMicrocred","Doc_Digitalizacion", idSucursal, ("CTE"+idCliente));
 
             if (!Directory.Exists(directoryPath))
             {
