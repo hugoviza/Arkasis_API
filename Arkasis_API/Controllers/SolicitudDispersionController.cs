@@ -156,7 +156,6 @@ namespace Arkasis_API.Controllers
             }
         }
 
-
         private QuerySolicitud GenerarQueryGuardarSolicitud(ConexionSQL conexionSQL, SolicitudDispersion sd)
         {
             List<String> queries = new List<string>();
@@ -237,16 +236,15 @@ namespace Arkasis_API.Controllers
                 queries.Add($@"SET @idPagos = {sd.IntPlazo} * 2 ");
             }
 
-
             //Generamos el id de cliente con un pad zero 7
             queries.Add("SET @idClienteDOCS = (select RIGHT('000000' + CAST(@idCliente AS VARCHAR), 7))");
             //Obtenemos el ultimo documento registrado
             queries.Add("SET @idLastDoc = (SELECT top 1 SUBSTRING(dgsLlave, 8, 3) from ARCICTEdg WHERE dgsX001c = @idCliente order by dgsX302 desc)");
 
-            queries.Add(getQueryInsertDocument(1, sd, sd.StrFotoINEFrontal_nombre, "INE FRONTAL"));
-            queries.Add(getQueryInsertDocument(2, sd, sd.StrFotoINEReverso_nombre, "INE REVERSO"));
-            queries.Add(getQueryInsertDocument(3, sd, sd.StrFotoPerfil_nombre, "FOTO PERFIL"));
-            queries.Add(getQueryInsertDocument(4, sd, sd.StrFotoComprobanteDomicilio_nombre, "COMPROBANTE DOMICILIO"));
+            queries.Add(getQueryInsertDocument(1, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoINEFrontal_nombre}", "INE FRONTAL"));
+            queries.Add(getQueryInsertDocument(2, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoINEReverso_nombre}", "INE REVERSO"));
+            queries.Add(getQueryInsertDocument(3, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoPerfil_nombre}", "FOTO PERFIL"));
+            queries.Add(getQueryInsertDocument(4, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoComprobanteDomicilio_nombre}", "COMPROBANTE DOMICILIO"));
 
 
             Double montoSolicitado = sd.DblMontoSolicitadoMejoraVivienda + sd.DblMontoSolicitadoEquipandoHogar;
@@ -264,18 +262,18 @@ namespace Arkasis_API.Controllers
 
             if(sd.DblMontoSolicitadoMejoraVivienda > 0)
             {
-                sd.StrProducto = "";
+                sd.StrProducto = "Mejora tu vivienda";
                 queries.Add($@"insert into arciced
-                                    (solX001, solX003, solX004, solX005, solX006, cedLlave, cedX003, cedX004, cedX005, cedX006, cedX007, cedX008, cedX009, cedX010, cedX012, cedX013, cedX014, cedX015, cedX016, cedX019, cedX020, cedX021, cedX023, cedX024, cedX025, cedX026, cedX027, cedX028, cedX030, cedX031, cedX033, cedX034, cedX036, cedX037, cedX040, cedX046, cedX047, cedX048, cedX049, cedX054c, cedX054d, cedX301, cedX302, cedX303, cedX304,cedX189,cedX190, cedX197, cedX130, cedX131,cedX029,cedX011,cedX191,cedX194, cedX120, cedX121, cedX122, cedX123, cedX124, cedX125) values
-                                    ('{sd.IdSucursal}', '{sd.StrFechaAlta}', '1', 'EN TRAMITE', @idGrupo, @idCliente, '{sd.StrApellidoPaterno.ToUpper()}', '{sd.StrApellidoMaterno.ToUpper()}', '{sd.StrNombre1.ToUpper()}', '{sd.StrNombre2.ToUpper()}', '{sd.StrNombreCompleto.ToUpper()}', '{sd.StrDomicilio.ToUpper()}', '{sd.StrDomicilioNumExt.ToUpper()}', '{sd.StrDomicilioNumInt.ToUpper()}', '{sd.StrDomicilioColonia.ToUpper()}', '{sd.IdDomicilioEstado}', '{sd.StrDomicilioEstado}', '{sd.IdDomicilioMunicipio}', '{sd.StrDomicilioMunicipio}', '{sd.StrDomicilioCodigoPostal}', '{sd.StrTelefono}', '{sd.StrCelular}', '{sd.StrCURP.ToUpper()}', '{sd.StrPais.ToUpper()}', '{sd.StrEstadoNacimiento.ToUpper()}', '{sd.StrNacionalidad.ToUpper()}', '{sd.IdGenero}', '{sd.StrGenero}', '{sd.StrFechaNacimiento}', '{sd.IdEstadoCivil}', '{sd.StrNumeroINE}', '{sd.StrClaveINE}', '{sd.StrEmail.ToLower()}', '{sd.StrOcupacion.ToUpper()}', '{sd.StrActividad}', '{sd.StrNombreConyuge.ToUpper()}', '{sd.StrFechaNacimientoConyuge}', '{sd.StrLugarNacimientoConyuge.ToUpper()}', '{sd.StrOcupacionConyuge.ToUpper()}', '{sd.DblIngresos}', '{sd.DblEgresos}', '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.DblMontoSolicitadoMejoraVivienda}','{sd.DblMontoSolicitadoMejoraVivienda}', '{sd.StrProducto}', '{sd.IdActividad}', '{sd.StrCNBV}','1','1','{sd.IntPlazo}', @idPagos, '{sd.StrDomicilio_mejoraVivienda}', '{sd.StrNumExt_mejoraVivienda}', '{sd.StrNumInt_mejoraVivienda}', '{sd.StrColonia_mejoraVivienda}', '{sd.StrMunicipio_mejoraVivienda}', '{sd.StrCodigoPostal_mejoraVivienda}')");
+                                    (solX001, solX003, solX004, solX005, solX006, cedLlave, cedX003, cedX004, cedX005, cedX006, cedX007, cedX008, cedX009, cedX010, cedX012, cedX013, cedX014, cedX015, cedX016, cedX019, cedX020, cedX021, cedX023, cedX024, cedX025, cedX026, cedX027, cedX028, cedX030, cedX031, cedX033, cedX034, cedX036, cedX037, cedX040, cedX046, cedX047, cedX048, cedX049, cedX054c, cedX054d, cedX301, cedX302, cedX303, cedX304,cedX189,cedX190, cedX197, cedX131,cedX029,cedX011,cedX191,cedX194, cedX120, cedX121, cedX122, cedX123, cedX124, cedX125, cedX132) values
+                                    ('{sd.IdSucursal}', '{sd.StrFechaAlta}', '1', 'EN TRAMITE', @idGrupo, @idCliente, '{sd.StrApellidoPaterno.ToUpper()}', '{sd.StrApellidoMaterno.ToUpper()}', '{sd.StrNombre1.ToUpper()}', '{sd.StrNombre2.ToUpper()}', '{sd.StrNombreCompleto.ToUpper()}', '{sd.StrDomicilio.ToUpper()}', '{sd.StrDomicilioNumExt.ToUpper()}', '{sd.StrDomicilioNumInt.ToUpper()}', '{sd.StrDomicilioColonia.ToUpper()}', '{sd.IdDomicilioEstado}', '{sd.StrDomicilioEstado}', '{sd.IdDomicilioMunicipio}', '{sd.StrDomicilioMunicipio}', '{sd.StrDomicilioCodigoPostal}', '{sd.StrTelefono}', '{sd.StrCelular}', '{sd.StrCURP.ToUpper()}', '{sd.StrPais.ToUpper()}', '{sd.StrEstadoNacimiento.ToUpper()}', '{sd.StrNacionalidad.ToUpper()}', '{sd.IdGenero}', '{sd.StrGenero}', '{sd.StrFechaNacimiento}', '{sd.IdEstadoCivil}', '{sd.StrNumeroINE}', '{sd.StrClaveINE}', '{sd.StrEmail.ToLower()}', '{sd.StrOcupacion.ToUpper()}', '{sd.StrActividad}', '{sd.StrNombreConyuge.ToUpper()}', '{sd.StrFechaNacimientoConyuge}', '{sd.StrLugarNacimientoConyuge.ToUpper()}', '{sd.StrOcupacionConyuge.ToUpper()}', '{sd.DblIngresos}', '{sd.DblEgresos}', '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.DblMontoSolicitadoMejoraVivienda}','{sd.DblMontoSolicitadoMejoraVivienda}', '{sd.StrProducto}', '{sd.StrCNBV}','1','1','{sd.IntPlazo}', @idPagos, '{sd.StrDomicilio_mejoraVivienda}', '{sd.StrNumExt_mejoraVivienda}', '{sd.StrNumInt_mejoraVivienda}', '{sd.StrColonia_mejoraVivienda}', '{sd.StrMunicipio_mejoraVivienda}', '{sd.StrCodigoPostal_mejoraVivienda}', '{sd.StrActividad}')");
             }
 
             if (sd.DblMontoSolicitadoEquipandoHogar > 0)
             {
-                sd.StrProducto = "MEJORA HOGAR";
+                //sd.StrProducto = "MEJORA HOGAR";
                 queries.Add($@"insert into arciced
-                                    (solX001, solX003, solX004, solX005, solX006, cedLlave, cedX003, cedX004, cedX005, cedX006, cedX007, cedX008, cedX009, cedX010, cedX012, cedX013, cedX014, cedX015, cedX016, cedX019, cedX020, cedX021, cedX023, cedX024, cedX025, cedX026, cedX027, cedX028, cedX030, cedX031, cedX033, cedX034, cedX036, cedX037, cedX040, cedX046, cedX047, cedX048, cedX049, cedX054c, cedX054d, cedX301, cedX302, cedX303, cedX304,cedX189,cedX190, cedX197, cedX130, cedX131,cedX029,cedX011,cedX191,cedX194) values
-                                    ('{sd.IdSucursal}', '{sd.StrFechaAlta}', '1', 'EN TRAMITE', @idGrupo, @idCliente, '{sd.StrApellidoPaterno.ToUpper()}', '{sd.StrApellidoMaterno.ToUpper()}', '{sd.StrNombre1.ToUpper()}', '{sd.StrNombre2.ToUpper()}', '{sd.StrNombreCompleto.ToUpper()}', '{sd.StrDomicilio.ToUpper()}', '{sd.StrDomicilioNumExt.ToUpper()}', '{sd.StrDomicilioNumInt.ToUpper()}', '{sd.StrDomicilioColonia.ToUpper()}', '{sd.IdDomicilioEstado}', '{sd.StrDomicilioEstado}', '{sd.IdDomicilioMunicipio}', '{sd.StrDomicilioMunicipio}', '{sd.StrDomicilioCodigoPostal}', '{sd.StrTelefono}', '{sd.StrCelular}', '{sd.StrCURP.ToUpper()}', '{sd.StrPais.ToUpper()}', '{sd.StrEstadoNacimiento.ToUpper()}', '{sd.StrNacionalidad.ToUpper()}', '{sd.IdGenero}', '{sd.StrGenero}', '{sd.StrFechaNacimiento}', '{sd.IdEstadoCivil}', '{sd.StrNumeroINE}', '{sd.StrClaveINE}', '{sd.StrEmail.ToLower()}', '{sd.StrOcupacion.ToUpper()}', '{sd.StrActividad}', '{sd.StrNombreConyuge.ToUpper()}', '{sd.StrFechaNacimientoConyuge}', '{sd.StrLugarNacimientoConyuge.ToUpper()}', '{sd.StrOcupacionConyuge.ToUpper()}', '{sd.DblIngresos}', '{sd.DblEgresos}', '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.DblMontoSolicitadoEquipandoHogar}','{sd.DblMontoSolicitadoEquipandoHogar}', '{sd.StrProducto}', '{sd.IdActividad}', '{sd.StrCNBV}','1','1','{sd.IntPlazo}', @idPagos)");
+                                    (solX001, solX003, solX004, solX005, solX006, cedLlave, cedX003, cedX004, cedX005, cedX006, cedX007, cedX008, cedX009, cedX010, cedX012, cedX013, cedX014, cedX015, cedX016, cedX019, cedX020, cedX021, cedX023, cedX024, cedX025, cedX026, cedX027, cedX028, cedX030, cedX031, cedX033, cedX034, cedX036, cedX037, cedX040, cedX046, cedX047, cedX048, cedX049, cedX054c, cedX054d, cedX301, cedX302, cedX303, cedX304,cedX189,cedX190, cedX197, cedX131,cedX029,cedX011,cedX191,cedX194, cedX132) values
+                                    ('{sd.IdSucursal}', '{sd.StrFechaAlta}', '1', 'EN TRAMITE', @idGrupo, @idCliente, '{sd.StrApellidoPaterno.ToUpper()}', '{sd.StrApellidoMaterno.ToUpper()}', '{sd.StrNombre1.ToUpper()}', '{sd.StrNombre2.ToUpper()}', '{sd.StrNombreCompleto.ToUpper()}', '{sd.StrDomicilio.ToUpper()}', '{sd.StrDomicilioNumExt.ToUpper()}', '{sd.StrDomicilioNumInt.ToUpper()}', '{sd.StrDomicilioColonia.ToUpper()}', '{sd.IdDomicilioEstado}', '{sd.StrDomicilioEstado}', '{sd.IdDomicilioMunicipio}', '{sd.StrDomicilioMunicipio}', '{sd.StrDomicilioCodigoPostal}', '{sd.StrTelefono}', '{sd.StrCelular}', '{sd.StrCURP.ToUpper()}', '{sd.StrPais.ToUpper()}', '{sd.StrEstadoNacimiento.ToUpper()}', '{sd.StrNacionalidad.ToUpper()}', '{sd.IdGenero}', '{sd.StrGenero}', '{sd.StrFechaNacimiento}', '{sd.IdEstadoCivil}', '{sd.StrNumeroINE}', '{sd.StrClaveINE}', '{sd.StrEmail.ToLower()}', '{sd.StrOcupacion.ToUpper()}', '{sd.StrActividad}', '{sd.StrNombreConyuge.ToUpper()}', '{sd.StrFechaNacimientoConyuge}', '{sd.StrLugarNacimientoConyuge.ToUpper()}', '{sd.StrOcupacionConyuge.ToUpper()}', '{sd.DblIngresos}', '{sd.DblEgresos}', '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.DblMontoSolicitadoEquipandoHogar}','{sd.DblMontoSolicitadoEquipandoHogar}', '{sd.StrProducto}', '{sd.StrCNBV}','1','1','{sd.IntPlazo}', @idPagos, '{sd.StrActividad}')");
             }
 
 

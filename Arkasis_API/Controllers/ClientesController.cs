@@ -209,5 +209,231 @@ namespace Arkasis_API.Controllers
 			}
 		}
 
+		[HttpPost("solicitudes")]
+		public IActionResult ObtenerSolicutudes(Cliente cliente)
+        {
+			ConexionSQL conexionSQL = new ConexionSQL();
+			String[] arrayConsultas = new string[1];
+			arrayConsultas[0] =
+				$@"SELECT top 100
+					solLlave IdSolicitud,
+					grmLlave IdGrupoSol,
+					replace(convert(varchar, solX003, 111), '/','-') StrFechaAlta,
+					solX005 StrStatusSolicitud,
+					solX001 IdSucursal,
+					cedX301 StrUsuario,
+					grmX005 idPromotor,
+					grmX006 StrPromotor,
+					grmX005c IdCordinador,
+					grmX006c StrCordinador,
+					cedLlave IdCliente,
+					cedX003 StrApellidoPaterno,
+					cedX004 StrApellidoMaterno,
+					cedX005 StrNombre1,
+					cedX006 StrNombre2,
+					replace(convert(varchar, cedX030, 111), '/','-') StrFechaNacimiento,
+					cedX027 IdGenero,
+					cedX028 StrGenero,
+					cedX023 StrCURP,
+					cedX008 StrDomicilio,
+					cedX019 StrDomicilioCodigoPostal,
+					cedX009 StrDomicilioNumExt,
+					cedX010 StrDomicilioNumInt,
+					cedX012 StrDomicilioColonia,
+					cedX013 IdDomicilioEstado,
+					cedX014 StrDomicilioEstado,
+					cedX015 IdDomicilioMunicipio,
+					cedX016 StrDomicilioMunicipio,
+					'' StrEstadoCivil,
+					cedX031 IdEstadoCivil,
+					cedX020 StrTelefono,
+					cedX021 StrCelular,
+					cedX037 StrOcupacion,
+					'' IdActividad,
+					cedX132 StrActividad,
+					cedX033 StrNumeroINE,
+					cedX034 StrClaveINE,
+					cedX024 StrPais,
+					cedX025 StrEstadoNacimiento,
+					cedX026 StrNacionalidad,
+					cedX036 StrEmail,
+					cedX046 StrNombreConyuge,
+					cedX048 StrLugarNacimientoConyuge,
+					replace(convert(varchar, cedX047, 111), '/','-') StrFechaNacimientoConyuge,
+					cedX049 StrOcupacionConyuge,
+					grmX076 StrReferenciaBancaria,
+					grmX077 StrBanco,
+					case when cedX120 is null then COALESCE(cedX197,'') else '' END StrProducto,
+					COALESCE(cedX191,'0') IntPlazo,
+					COALESCE(grmX078, '0') IntQuedateCasa,
+					case when cedX120 is not null then COALESCE(cedX189,0) else 0 end as DblMontoSolicitadoMejoraVivienda,
+					case when cedX120 is null then COALESCE(cedX189,0) else 0 end as DblMontoSolicitadoEquipandoHogar,
+					COALESCE(cedX190,0) DblMontoAutorizado,
+					COALESCE(cedX054c,0) DblIngresos,
+					COALESCE(cedX054d,0) DblEgresos,
+					cedX131 StrCNBV,
+					cedX120 StrDomicilio_mejoraVivienda,
+					cedX125 StrCodigoPostal_mejoraVivienda,
+					cedX121 StrNumExt_mejoraVivienda,
+					cedX122 StrNumInt_mejoraVivienda,
+					cedX123 StrColonia_mejoraVivienda,
+					'' IdEstado_mejoraVivienda,
+					'' StrEstado_mejoraVivienda,
+					'' IdMunicipio_mejoraVivienda,
+					cedX124 StrMunicipio_mejoraVivienda,
+					'' StrFotoINEFrontal_B64,
+					(SELECT top 1 dgsX003 FROM ARCICTEdg WHERE dgsX001c = sol.cedLlave AND dgsX004 = 'INE FRONTAL' ) StrFotoINEFrontal_nombre,
+					'' StrFotoINEReverso_B64,
+					(SELECT top 1 dgsX003 FROM ARCICTEdg WHERE dgsX001c = sol.cedLlave AND dgsX004 = 'INE REVERSO' ) StrFotoINEReverso_nombre,
+					'' StrFotoPerfil_B64,
+					(SELECT top 1 dgsX003 FROM ARCICTEdg WHERE dgsX001c = sol.cedLlave AND dgsX004 = 'FOTO PERFIL' ) StrFotoPerfil_nombre,
+					'' StrFotoComprobanteDomicilio_B64,
+					(SELECT top 1 dgsX003 FROM ARCICTEdg WHERE dgsX001c = sol.cedLlave AND dgsX004 = 'COMPROBANTE DOMICILIO' ) StrFotoComprobanteDomicilio_nombre
+				FROM arciced as sol
+				JOIN arcigrm as gru on sol.solX006 = gru.grmX002
+				WHERE 
+					concat(cedX016, ' ', cedX014) like '%{cliente.StrMunicipio.Replace("'", "%").Replace(" ", "%")}%{cliente.StrEstado.Replace("'", "%").Replace(" ", "%")}%'
+					AND CONCAT(cedX003, ' ', cedX004, ' ' ,cedX005, ' ', cedX006, ' ', cedX023, ' ', cedX034) like '%{cliente.StrNombre1.Replace("'", "%").Replace(" ", "%")}%'
+				;";
+
+			DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
+
+			if (arrayResult != null)
+			{
+				if (arrayResult[0].Rows.Count > 0)
+				{
+					List<SolicitudDispersion> lista = new List<SolicitudDispersion>();
+
+					foreach (DataRow row in arrayResult[0].Rows)
+					{
+						lista.Add(new SolicitudDispersion(row));
+					}
+
+					return Ok(new { Mensaje = "Consulta ok", Success = true, Resultado = lista.ToArray() });
+				}
+				else
+				{
+					return Ok(new { Mensaje = "No se encontraron solicitudes", Success = false });
+				}
+			}
+			else
+			{
+				return Ok(new { Mensaje = "No se encontraron registros", Success = false });
+			}
+		}
+
+
+		[HttpPost("ultimas-solicitudes")]
+		public IActionResult ObtenerUltimasSolicutudes(Usuario usuario)
+		{
+			ConexionSQL conexionSQL = new ConexionSQL();
+			String[] arrayConsultas = new string[1];
+			arrayConsultas[0] =
+				$@"SELECT top 10
+					solLlave IdSolicitud,
+					grmLlave IdGrupoSol,
+					replace(convert(varchar, solX003, 111), '/','-') StrFechaAlta,
+					solX005 StrStatusSolicitud,
+					solX001 IdSucursal,
+					cedX301 StrUsuario,
+					grmX005 idPromotor,
+					grmX006 StrPromotor,
+					grmX005c IdCordinador,
+					grmX006c StrCordinador,
+					cedLlave IdCliente,
+					cedX003 StrApellidoPaterno,
+					cedX004 StrApellidoMaterno,
+					cedX005 StrNombre1,
+					cedX006 StrNombre2,
+					replace(convert(varchar, cedX030, 111), '/','-') StrFechaNacimiento,
+					cedX027 IdGenero,
+					cedX028 StrGenero,
+					cedX023 StrCURP,
+					cedX008 StrDomicilio,
+					cedX019 StrDomicilioCodigoPostal,
+					cedX009 StrDomicilioNumExt,
+					cedX010 StrDomicilioNumInt,
+					cedX012 StrDomicilioColonia,
+					cedX013 IdDomicilioEstado,
+					cedX014 StrDomicilioEstado,
+					cedX015 IdDomicilioMunicipio,
+					cedX016 StrDomicilioMunicipio,
+					'' StrEstadoCivil,
+					cedX031 IdEstadoCivil,
+					cedX020 StrTelefono,
+					cedX021 StrCelular,
+					cedX037 StrOcupacion,
+					'' IdActividad,
+					cedX132 StrActividad,
+					cedX033 StrNumeroINE,
+					cedX034 StrClaveINE,
+					cedX024 StrPais,
+					cedX025 StrEstadoNacimiento,
+					cedX026 StrNacionalidad,
+					cedX036 StrEmail,
+					cedX046 StrNombreConyuge,
+					cedX048 StrLugarNacimientoConyuge,
+					replace(convert(varchar, cedX047, 111), '/','-') StrFechaNacimientoConyuge,
+					cedX049 StrOcupacionConyuge,
+					grmX076 StrReferenciaBancaria,
+					grmX077 StrBanco,
+					case when cedX120 is null then COALESCE(cedX197,'') else '' END StrProducto,
+					COALESCE(cedX191,'0') IntPlazo,
+					COALESCE(grmX078, '0') IntQuedateCasa,
+					case when cedX120 is not null then COALESCE(cedX189,0) else 0 end as DblMontoSolicitadoMejoraVivienda,
+					case when cedX120 is null then COALESCE(cedX189,0) else 0 end as DblMontoSolicitadoEquipandoHogar,
+					COALESCE(cedX190,0) DblMontoAutorizado,
+					COALESCE(cedX054c,0) DblIngresos,
+					COALESCE(cedX054d,0) DblEgresos,
+					cedX131 StrCNBV,
+					cedX120 StrDomicilio_mejoraVivienda,
+					cedX125 StrCodigoPostal_mejoraVivienda,
+					cedX121 StrNumExt_mejoraVivienda,
+					cedX122 StrNumInt_mejoraVivienda,
+					cedX123 StrColonia_mejoraVivienda,
+					'' IdEstado_mejoraVivienda,
+					'' StrEstado_mejoraVivienda,
+					'' IdMunicipio_mejoraVivienda,
+					cedX124 StrMunicipio_mejoraVivienda,
+					'' StrFotoINEFrontal_B64,
+					(SELECT top 1 dgsX003 FROM ARCICTEdg WHERE dgsX001c = sol.cedLlave AND dgsX004 = 'INE FRONTAL' ) StrFotoINEFrontal_nombre,
+					'' StrFotoINEReverso_B64,
+					(SELECT top 1 dgsX003 FROM ARCICTEdg WHERE dgsX001c = sol.cedLlave AND dgsX004 = 'INE REVERSO' ) StrFotoINEReverso_nombre,
+					'' StrFotoPerfil_B64,
+					(SELECT top 1 dgsX003 FROM ARCICTEdg WHERE dgsX001c = sol.cedLlave AND dgsX004 = 'FOTO PERFIL' ) StrFotoPerfil_nombre,
+					'' StrFotoComprobanteDomicilio_B64,
+					(SELECT top 1 dgsX003 FROM ARCICTEdg WHERE dgsX001c = sol.cedLlave AND dgsX004 = 'COMPROBANTE DOMICILIO' ) StrFotoComprobanteDomicilio_nombre
+				FROM arciced as sol
+				JOIN arcigrm as gru on sol.solX006 = gru.grmX002
+				WHERE 
+					cedX301 = '{usuario.User}'
+				ORDER BY solX003 DESC
+				;";
+
+			DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
+
+			if (arrayResult != null)
+			{
+				if (arrayResult[0].Rows.Count > 0)
+				{
+					List<SolicitudDispersion> lista = new List<SolicitudDispersion>();
+
+					foreach (DataRow row in arrayResult[0].Rows)
+					{
+						lista.Add(new SolicitudDispersion(row));
+					}
+
+					return Ok(new { Mensaje = "Consulta ok", Success = true, Resultado = lista.ToArray() });
+				}
+				else
+				{
+					return Ok(new { Mensaje = "No se encontraron solicitudes", Success = false });
+				}
+			}
+			else
+			{
+				return Ok(new { Mensaje = "No se encontraron registros", Success = false });
+			}
+		}
 	}
 }
