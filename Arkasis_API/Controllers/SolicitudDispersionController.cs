@@ -215,16 +215,21 @@ namespace Arkasis_API.Controllers
             queries.Add("DECLARE @idClienteDOCS NVARCHAR(50)");
             queries.Add("DECLARE @idLastDoc NVARCHAR(50)");
             queries.Add("DECLARE @idDoc NVARCHAR(50)");
+            queries.Add("DECLARE @Identificador NVARCHAR(50)");
 
             queries.Add("DECLARE @idSolicitudGrupo Integer");
             queries.Add("DECLARE @idCiclo Integer");
             queries.Add("DECLARE @idPagos Integer");
             if (sd.IdCliente == "")
             {
-                queries.Add($@"SET @idCliente = (select CONCAT('5', RIGHT('00000' + CAST( (max(grmLlave) + 1) AS VARCHAR), 6)) as consecutivo from ARCIGRM)");
-                queries.Add($@"SET @idClienteDOCS = (select CONCAT('5', RIGHT('00000' + CAST( (max(grmLlave) + 1) AS VARCHAR), 6)) as consecutivo from ARCIGRM)");
-                queries.Add($@"SET @idGrupo = (select CONCAT('5', RIGHT('00000' + CAST( (max(grmLlave) + 1) AS VARCHAR), 6)) as consecutivo from ARCIGRM)");
-                queries.Add($@"SET @idCiclo = '0' ");
+
+                queries.Add($@"SET @Identificador = (select CONCAT('5', RIGHT('00000' + CAST( (FLOOR(RAND()*(9999-1)+1)) AS VARCHAR), 6)) as consecutivo);");
+
+
+                queries.Add($@"SET @idCliente =  @Identificador");
+                queries.Add($@"SET @idClienteDOCS =  @Identificador");
+                queries.Add($@"SET @idGrupo =  @Identificador");
+                queries.Add($@"SET @idCiclo = '1' ");
                 queries.Add($@"SET @idPagos = {sd.IntPlazo} * 2 ");
             }
             else
@@ -317,7 +322,7 @@ namespace Arkasis_API.Controllers
         {
             byte[] imageBytes = Convert.FromBase64String(base64String);
 
-            string directoryPath = Path.Combine("/ArkasisMicrocred","Doc_Digitalizacion", idSucursal, ("CTE"+idCliente));
+            string directoryPath = Path.Combine("/ArkasisMicrocred_Pruebas", "Doc_Digitalizacion", idSucursal, ("CTE"+idCliente));
 
             if (!Directory.Exists(directoryPath))
             {

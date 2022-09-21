@@ -176,7 +176,7 @@ namespace Arkasis_API.Controllers
 	                maeLlave as IdSucursal,
 	                maeX010 as strClaveSucursal,
 	                maeX011 as strSucursal
-                from arcimae as sc where SUBSTRING(maeLlavex, 4, 6)  = '014';";
+                from arcimae";
 
             DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
 
