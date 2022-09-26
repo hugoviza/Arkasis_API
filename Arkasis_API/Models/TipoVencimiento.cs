@@ -11,14 +11,14 @@ namespace Arkasis_API.Models
         public String IdSucursal { get; set; }
         public String IdTipoVencimiento { get; set; }
         public String StrTipoVencimiento { get; set; }
-        public Int16 NumDias { get; set; }
+        public Int16 IntNumDias { get; set; }
 
         public TipoVencimiento()
         {
             IdSucursal = "";
             IdTipoVencimiento = "";
             StrTipoVencimiento = "";
-            NumDias = 0;
+            IntNumDias = 0;
         }
 
         public TipoVencimiento(DataRow dataRow)
@@ -28,7 +28,7 @@ namespace Arkasis_API.Models
                 IdSucursal = dataRow["IdSucursal"].ToString();
                 IdTipoVencimiento = dataRow["IdTipoVencimiento"].ToString();
                 StrTipoVencimiento = dataRow["StrTipoVencimiento"].ToString();
-                NumDias = Int16.Parse(dataRow["intNumDias"].ToString());
+                IntNumDias = Int16.Parse(dataRow["IntNumDias"].ToString());
             }
         }
     }

@@ -324,7 +324,7 @@ namespace Arkasis_API.Controllers
 	                sqmLlave as IdTipoVencimiento,
 	                sqmX001 as IdSucursal,
 	                sqmX003 as StrTipoVencimiento,
-	                sqmX004 as NumDias
+	                sqmX004 as IntNumDias
                 FROM arcisqm;";
 
             DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
@@ -333,11 +333,11 @@ namespace Arkasis_API.Controllers
             {
                 if (arrayResult[0].Rows.Count > 0)
                 {
-                    List<Coordinador> listaResultados = new List<Coordinador>();
+                    List<TipoVencimiento> listaResultados = new List<TipoVencimiento>();
 
                     foreach (DataRow row in arrayResult[0].Rows)
                     {
-                        listaResultados.Add(new Coordinador(row));
+                        listaResultados.Add(new TipoVencimiento(row));
                     }
 
                     return Ok(new { Mensaje = "Consulta ok", Success = true, Resultado = listaResultados.ToArray() });
