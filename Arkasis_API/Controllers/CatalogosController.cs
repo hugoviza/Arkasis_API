@@ -314,5 +314,78 @@ namespace Arkasis_API.Controllers
         }
 
 
+        [HttpGet("tipovencimiento")]
+        public IActionResult GetTipoVencimiento()
+        {
+            ConexionSQL conexionSQL = new ConexionSQL();
+            String[] arrayConsultas = new string[1];
+            arrayConsultas[0] =
+                @"SELECT 
+	                sqmLlave as IdTipoVencimiento,
+	                sqmX001 as IdSucursal,
+	                sqmX003 as StrTipoVencimiento,
+	                sqmX004 as NumDias
+                FROM arcisqm;";
+
+            DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
+
+            if (arrayResult != null)
+            {
+                if (arrayResult[0].Rows.Count > 0)
+                {
+                    List<Coordinador> listaResultados = new List<Coordinador>();
+
+                    foreach (DataRow row in arrayResult[0].Rows)
+                    {
+                        listaResultados.Add(new Coordinador(row));
+                    }
+
+                    return Ok(new { Mensaje = "Consulta ok", Success = true, Resultado = listaResultados.ToArray() });
+                }
+                else
+                {
+                    return Ok(new { Mensaje = "No se encontraron promotores", Success = false });
+                }
+            }
+            else
+            {
+                return Ok(new { Mensaje = "No se encontraron registros", Success = false });
+            }
+        }
+
+
+        [HttpGet("tipovencimiento/total")]
+        public IActionResult CountTipoVencimiento()
+        {
+            ConexionSQL conexionSQL = new ConexionSQL();
+            String[] arrayConsultas = new string[1];
+            arrayConsultas[0] =
+                @"SELECT 
+	                COUNT(*) AS total
+                FROM arcisqm;";
+
+            DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
+
+            if (arrayResult != null)
+            {
+                if (arrayResult[0].Rows.Count > 0)
+                {
+                    String total = "0";
+                    if (arrayResult[0].Rows[0] != null)
+                    {
+                        total = arrayResult[0].Rows[0]["total"].ToString();
+                    }
+                    return Ok(new { Mensaje = "Consulta ok", Success = true, Resultado = total });
+                }
+                else
+                {
+                    return Ok(new { Mensaje = "Sin resultados", Success = false, Resultado = "0" });
+                }
+            }
+            else
+            {
+                return Ok(new { Mensaje = "No se encontraron registros", Success = false, Resultado = "0" });
+            }
+        }
     }
 }
