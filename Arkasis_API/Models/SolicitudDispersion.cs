@@ -62,7 +62,7 @@ namespace Arkasis_API.Models
         public Double DblIngresos { get; set; }
         public Double DblEgresos { get; set; }
         public String StrCNBV { get; set; }
-        public String IdTipoVencimiento { get; set; }
+        public Int32 IdTipoVencimiento { get; set; }
         public String StrTipoVencimiento { get; set; }
         public Int32 IntNumPagos { get; set; }
         public String IdTipoContratoIndividual { get; set; }
@@ -168,7 +168,7 @@ namespace Arkasis_API.Models
                 StrFotoPerfil_nombre = dataRow["StrFotoPerfil_nombre"] != null ? dataRow["StrFotoPerfil_nombre"].ToString() : "";
                 StrFotoComprobanteDomicilio_B64 = dataRow["StrFotoComprobanteDomicilio_B64"] != null ? dataRow["StrFotoComprobanteDomicilio_B64"].ToString() : "";
                 StrFotoComprobanteDomicilio_nombre = dataRow["StrFotoComprobanteDomicilio_nombre"] != null ? dataRow["StrFotoComprobanteDomicilio_nombre"].ToString() : "";
-                IdTipoVencimiento = dataRow["IdTipoVencimiento"] != null ? dataRow["IdTipoVencimiento"].ToString() : "";
+                IdTipoVencimiento = dataRow["IdTipoVencimiento"] != null ? Int32.Parse(dataRow["IdTipoVencimiento"].ToString()) : "";
                 StrTipoVencimiento = dataRow["StrTipoVencimiento"] != null ? dataRow["StrTipoVencimiento"].ToString() : "";
                 IntNumPagos = dataRow["IntNumPagos"] != null ? Int32.Parse(dataRow["IntNumPagos"].ToString()) : 0;
                 IdTipoContratoIndividual = dataRow["IdTipoContratoIndividual"] != null ? dataRow["IdTipoContratoIndividual"].ToString() : "";
