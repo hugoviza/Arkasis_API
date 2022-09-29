@@ -12,11 +12,14 @@ namespace Arkasis_API.Models
         public String StrSucursal { get; set; }
         public String StrClaveSucursal { get; set; }
 
+        public String IdEmpresaCto { get; set; }
+
         public Sucursal()
         {
             IdSucursal = "";
             StrSucursal = "";
             StrClaveSucursal = "";
+            IdEmpresaCto = "";
         }
 
         public Sucursal(DataRow dataRow)
@@ -26,6 +29,7 @@ namespace Arkasis_API.Models
                 IdSucursal = dataRow["IdSucursal"].ToString();
                 StrSucursal = dataRow["StrSucursal"].ToString();
                 StrClaveSucursal = dataRow["StrClaveSucursal"].ToString();
+                IdEmpresaCto = dataRow["IdEmpresaCto"].ToString();
             }
         }
     }

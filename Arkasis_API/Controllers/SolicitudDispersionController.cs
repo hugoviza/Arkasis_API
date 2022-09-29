@@ -220,6 +220,8 @@ namespace Arkasis_API.Controllers
             queries.Add("DECLARE @idSolicitudGrupo Integer");
             queries.Add("DECLARE @idCiclo Integer");
             queries.Add("DECLARE @idPagos Integer");
+            queries.Add("DECLARE @idEmpresaCTO NVARCHAR(50)");
+
             if (sd.IdCliente == "")
             {
 
@@ -246,10 +248,15 @@ namespace Arkasis_API.Controllers
             //Obtenemos el ultimo documento registrado
             queries.Add("SET @idLastDoc = (SELECT top 1 SUBSTRING(dgsLlave, 8, 3) from ARCICTEdg WHERE dgsX001c = @idCliente order by dgsX302 desc)");
 
-            queries.Add(getQueryInsertDocument(1, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoINEFrontal_nombre}", "INE FRONTAL"));
-            queries.Add(getQueryInsertDocument(2, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoINEReverso_nombre}", "INE REVERSO"));
-            queries.Add(getQueryInsertDocument(3, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoPerfil_nombre}", "FOTO PERFIL"));
-            queries.Add(getQueryInsertDocument(4, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoComprobanteDomicilio_nombre}", "COMPROBANTE DOMICILIO"));
+           
+            queries.Add($@"SET @idEmpresaCTO = (SELECT maeX052 from arcimae where maeLlave = {sd.IdSucursal});");
+
+
+
+            queries.Add(getQueryInsertDocument(1, sd, $@"Doc_Digitalizacion/maeX052/{sd.IdSucursal}/{sd.StrFotoINEFrontal_nombre}", "INE FRONTAL"));
+            queries.Add(getQueryInsertDocument(2, sd, $@"Doc_Digitalizacion/maeX052/{sd.IdSucursal}/{sd.StrFotoINEReverso_nombre}", "INE REVERSO"));
+            queries.Add(getQueryInsertDocument(3, sd, $@"Doc_Digitalizacion/maeX052/{sd.IdSucursal}/{sd.StrFotoPerfil_nombre}", "FOTO PERFIL"));
+            queries.Add(getQueryInsertDocument(4, sd, $@"Doc_Digitalizacion/maeX052/{sd.IdSucursal}/{sd.StrFotoComprobanteDomicilio_nombre}", "COMPROBANTE DOMICILIO"));
 
 
             Double montoSolicitado = sd.DblMontoSolicitadoMejoraVivienda + sd.DblMontoSolicitadoEquipandoHogar;
@@ -315,8 +322,8 @@ namespace Arkasis_API.Controllers
             queries.Add($@"SET @idDoc = (SELECT CONCAT(@idClienteDOCS, IIF(@idLastDoc is null, '00{index}', RIGHT('000' + CAST( (CAST(@idLastDoc as int) + {index})  AS VARCHAR), 3)) ))");
 
             queries.Add($@"INSERT INTO ARCICTEdg 
-                    (dgsX001, dgsLlave, dgsX001c, dgsX003, dgsX004, dgsX006, dgsX007, dgsX009, dgsX301, dgsX302) VALUES
-                    ('{sd.IdSucursal}', @idDoc, @idCliente, '{fileName}', '{fileDescription}', 'Evidencia subida desde app', GETDATE(), 0, '{sd.StrUsuario}', GETDATE())");
+                    (dgsX001, dgsLlave, dgsX001c, dgsX003, dgsX004, dgsX006, dgsX007, dgsX009, dgsX301, dgsX302,dgsX010) VALUES
+                    ('{sd.IdSucursal}', @idDoc, @idCliente, '{fileName}', '{fileDescription}', 'Evidencia subida desde app', GETDATE(), 0, '{sd.StrUsuario}', GETDATE(),21)");
             
             foreach (String query in queries)
             {

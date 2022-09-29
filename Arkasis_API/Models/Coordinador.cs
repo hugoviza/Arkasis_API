@@ -11,6 +11,7 @@ namespace Arkasis_API.Models
         public String IdCoordinador { get; set; }
         public String IdSucursal { get; set; }
         public String StrNombre { get; set; }
+        public String IdEmpresaCto { get; set; }
 
         public Coordinador(DataRow dataRow)
         {
@@ -19,6 +20,7 @@ namespace Arkasis_API.Models
                 IdCoordinador = dataRow["IdCoordinador"].ToString();
                 IdSucursal = dataRow["IdSucursal"].ToString();
                 StrNombre = dataRow["StrNombre"].ToString();
+                IdEmpresaCto = dataRow["idEmpresaCTo"].ToString();
             }
         }
     }
