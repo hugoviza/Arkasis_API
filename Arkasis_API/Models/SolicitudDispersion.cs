@@ -12,6 +12,7 @@ namespace Arkasis_API.Models
         public String StrFechaAlta { get; set; }
         public String StrStatusSolicitud { get; set; }
         public String IdSucursal { get; set; }
+        public String IdEmpresa { get; set; }
         public String idPromotor { get; set; }
         public String StrUsuario { get; set; }
         public String StrPromotor { get; set; }

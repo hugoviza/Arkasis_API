@@ -39,6 +39,7 @@ namespace Arkasis_API.Controllers
         public IActionResult GuardarSolicitud(SolicitudDispersion sd)
         {
             ConexionSQL conexionSQL = new ConexionSQL();
+            sd.IdEmpresa = getIdEmpresaPorSucursal(conexionSQL, sd.IdSucursal);
             QuerySolicitud querySolicitud = GenerarQueryGuardarSolicitud(conexionSQL, sd);
             if(querySolicitud.StrMensaje != "")
             {
@@ -55,10 +56,10 @@ namespace Arkasis_API.Controllers
                 {
                     sd.IdCliente = arrayResult[0].Rows[0]["IdCliente"].ToString();
                     //Save the Byte Array as Image File.
-                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
-                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
-                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
-                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
+                    saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
+                    saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
+                    saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
+                    saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
 
                     return Ok(new { Mensaje = "Guardado correctamente", Success = true, Resultado = "1"});
                 }
@@ -81,6 +82,7 @@ namespace Arkasis_API.Controllers
 
             foreach (SolicitudDispersion sd in listaSolicitudes)
             {
+                sd.IdEmpresa = getIdEmpresaPorSucursal(conexionSQL, sd.IdSucursal);
                 QuerySolicitud querySolicitud = GenerarQueryGuardarSolicitud(conexionSQL, sd);
                 if (querySolicitud.StrMensaje != "")
                 {
@@ -98,10 +100,10 @@ namespace Arkasis_API.Controllers
                         {
                             sd.IdCliente = arrayResult[0].Rows[0]["IdCliente"].ToString();
                             //Save the Byte Array as Image File.
-                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
-                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
-                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
-                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
+                            saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
+                            saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
+                            saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
+                            saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
 
                             listaResponse.Add(new EstatusSincronizacionSolicitud(sd.IdSolicitud, true, ""));
                         }
@@ -246,10 +248,10 @@ namespace Arkasis_API.Controllers
             //Obtenemos el ultimo documento registrado
             queries.Add("SET @idLastDoc = (SELECT top 1 SUBSTRING(dgsLlave, 8, 3) from ARCICTEdg WHERE dgsX001c = @idCliente order by dgsX302 desc)");
 
-            queries.Add(getQueryInsertDocument(1, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoINEFrontal_nombre}", "INE FRONTAL"));
-            queries.Add(getQueryInsertDocument(2, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoINEReverso_nombre}", "INE REVERSO"));
-            queries.Add(getQueryInsertDocument(3, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoPerfil_nombre}", "FOTO PERFIL"));
-            queries.Add(getQueryInsertDocument(4, sd, $@"Doc_Digitalizacion/{sd.IdSucursal}/{sd.StrFotoComprobanteDomicilio_nombre}", "COMPROBANTE DOMICILIO"));
+            queries.Add(getQueryInsertDocument(1, sd, "INE FRONTAL"));
+            queries.Add(getQueryInsertDocument(2, sd, "INE REVERSO"));
+            queries.Add(getQueryInsertDocument(3, sd, "FOTO PERFIL"));
+            queries.Add(getQueryInsertDocument(4, sd, "COMPROBANTE DOMICILIO"));
 
 
             Double montoSolicitado = sd.DblMontoSolicitadoMejoraVivienda + sd.DblMontoSolicitadoEquipandoHogar;
@@ -306,10 +308,28 @@ namespace Arkasis_API.Controllers
         }
 
 
-        private String getQueryInsertDocument(int index, SolicitudDispersion sd, String fileName, String fileDescription)
+        private String getQueryInsertDocument(int index, SolicitudDispersion sd, String fileDescription)
         {
             List<String> queries = new List<string>();
             String queriesString = "";
+
+            String fileName = $@"Doc_Digitalizacion/{sd.IdEmpresa}/{sd.IdSucursal}/";
+
+            switch(fileDescription)
+            {
+                case "INE FRONTAL":
+                    fileName += sd.StrFotoINEFrontal_nombre;
+                    break;
+                case "INE REVERSO":
+                    fileName += sd.StrFotoINEReverso_nombre;
+                    break;
+                case "FOTO PERFIL":
+                    fileName += sd.StrFotoPerfil_nombre;
+                    break;
+                case "COMPROBANTE DOMICILIO":
+                    fileName += sd.StrFotoComprobanteDomicilio_nombre;
+                    break;
+            }
 
             //Generamos el nuevo id del documento
             queries.Add($@"SET @idDoc = (SELECT CONCAT(@idClienteDOCS, IIF(@idLastDoc is null, '00{index}', RIGHT('000' + CAST( (CAST(@idLastDoc as int) + {index})  AS VARCHAR), 3)) ))");
@@ -326,11 +346,11 @@ namespace Arkasis_API.Controllers
             return queriesString;
         }
 
-        private String saveImage(String idSucursal, String idCliente, String base64String, String fileName)
+        private String saveImage(String idEmpresa, String idSucursal, String idCliente, String base64String, String fileName)
         {
             byte[] imageBytes = Convert.FromBase64String(base64String);
 
-            string directoryPath = Path.Combine("/ArkasisMicrocred_Pruebas", "Doc_Digitalizacion", idSucursal, ("CTE"+idCliente));
+            string directoryPath = Path.Combine("/ArkasisMicrocred_Pruebas", "Doc_Digitalizacion", idEmpresa, idSucursal, ("CTE"+idCliente));
 
             if (!Directory.Exists(directoryPath))
             {
@@ -342,6 +362,24 @@ namespace Arkasis_API.Controllers
             System.IO.File.WriteAllBytes(filePath, imageBytes);
 
             return fileName;
+        }
+
+        private String getIdEmpresaPorSucursal(ConexionSQL conexionSQL, String IdSucursal)
+        {
+            List<String> queries = new List<string>();
+            // Obtenemos el IdEmpresa
+            queries.Add($@"Select maex052 IdSucursal from arcimae where maeLlave = '{IdSucursal}'");
+            DataTable[] arrayResult = conexionSQL.EjecutarQueries(queries.ToArray());
+
+            if (arrayResult != null)
+            {
+                if (arrayResult[0].Rows.Count > 0)
+                {
+                    return arrayResult[0].Rows[0]["IdSucursal"].ToString();
+                }
+            }
+
+            return "";
         }
 
 
