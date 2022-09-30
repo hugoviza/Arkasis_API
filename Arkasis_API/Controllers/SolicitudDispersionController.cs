@@ -39,6 +39,7 @@ namespace Arkasis_API.Controllers
         public IActionResult GuardarSolicitud(SolicitudDispersion sd)
         {
             ConexionSQL conexionSQL = new ConexionSQL();
+            sd.IdEmpresa = getIdEmpresaPorSucursal(conexionSQL, sd.IdSucursal);
             QuerySolicitud querySolicitud = GenerarQueryGuardarSolicitud(conexionSQL, sd);
             if(querySolicitud.StrMensaje != "")
             {
@@ -55,10 +56,10 @@ namespace Arkasis_API.Controllers
                 {
                     sd.IdCliente = arrayResult[0].Rows[0]["IdCliente"].ToString();
                     //Save the Byte Array as Image File.
-                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
-                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
-                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
-                    saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
+                    saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
+                    saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
+                    saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
+                    saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
 
                     return Ok(new { Mensaje = "Guardado correctamente", Success = true, Resultado = "1"});
                 }
@@ -81,6 +82,7 @@ namespace Arkasis_API.Controllers
 
             foreach (SolicitudDispersion sd in listaSolicitudes)
             {
+                sd.IdEmpresa = getIdEmpresaPorSucursal(conexionSQL, sd.IdSucursal);
                 QuerySolicitud querySolicitud = GenerarQueryGuardarSolicitud(conexionSQL, sd);
                 if (querySolicitud.StrMensaje != "")
                 {
@@ -98,10 +100,10 @@ namespace Arkasis_API.Controllers
                         {
                             sd.IdCliente = arrayResult[0].Rows[0]["IdCliente"].ToString();
                             //Save the Byte Array as Image File.
-                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
-                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
-                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
-                            saveImage(sd.IdSucursal, sd.IdCliente, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
+                            saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoINEFrontal_B64, sd.StrFotoINEFrontal_nombre);
+                            saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoINEReverso_B64, sd.StrFotoINEReverso_nombre);
+                            saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoPerfil_B64, sd.StrFotoPerfil_nombre);
+                            saveImage(sd.IdEmpresa, sd.IdSucursal, sd.IdCliente, sd.StrFotoComprobanteDomicilio_B64, sd.StrFotoComprobanteDomicilio_nombre);
 
                             listaResponse.Add(new EstatusSincronizacionSolicitud(sd.IdSolicitud, true, ""));
                         }
@@ -248,15 +250,10 @@ namespace Arkasis_API.Controllers
             //Obtenemos el ultimo documento registrado
             queries.Add("SET @idLastDoc = (SELECT top 1 SUBSTRING(dgsLlave, 8, 3) from ARCICTEdg WHERE dgsX001c = @idCliente order by dgsX302 desc)");
 
-           
-            queries.Add($@"SET @idEmpresaCTO = (SELECT maeX052 from arcimae where maeLlave = {sd.IdSucursal});");
-
-
-
-            queries.Add(getQueryInsertDocument(1, sd, $@"Doc_Digitalizacion/maeX052/{sd.IdSucursal}/{sd.StrFotoINEFrontal_nombre}", "INE FRONTAL"));
-            queries.Add(getQueryInsertDocument(2, sd, $@"Doc_Digitalizacion/maeX052/{sd.IdSucursal}/{sd.StrFotoINEReverso_nombre}", "INE REVERSO"));
-            queries.Add(getQueryInsertDocument(3, sd, $@"Doc_Digitalizacion/maeX052/{sd.IdSucursal}/{sd.StrFotoPerfil_nombre}", "FOTO PERFIL"));
-            queries.Add(getQueryInsertDocument(4, sd, $@"Doc_Digitalizacion/maeX052/{sd.IdSucursal}/{sd.StrFotoComprobanteDomicilio_nombre}", "COMPROBANTE DOMICILIO"));
+            queries.Add(getQueryInsertDocument(1, sd, "INE FRONTAL"));
+            queries.Add(getQueryInsertDocument(2, sd, "INE REVERSO"));
+            queries.Add(getQueryInsertDocument(3, sd, "FOTO PERFIL"));
+            queries.Add(getQueryInsertDocument(4, sd, "COMPROBANTE DOMICILIO"));
 
 
             Double montoSolicitado = sd.DblMontoSolicitadoMejoraVivienda + sd.DblMontoSolicitadoEquipandoHogar;
@@ -273,7 +270,7 @@ namespace Arkasis_API.Controllers
                                     grmX007, grmX011, grmX075, grmX005c, grmX006c,grmX076,grmX077,grmX078, grmX015, grmX016, 
                                     grmX017a
                                 ) values
-                                ('{sd.IdSucursal}', @idGrupo, '{sd.StrNombreCompleto.ToUpper()}' , '1', '{sd.idPromotor}', '{sd.StrPromotor.ToUpper()}', '{montoSolicitado}', '{sd.IntPlazo}', '1', '1', 
+                                ('{sd.IdSucursal}', @idGrupo, '{sd.StrNombreCompleto.ToUpper()}' , '1', '{sd.idPromotor}', '{sd.StrPromotor.ToUpper()}', '{montoSolicitado}', '{sd.DblPlazo}', '1', '1', 
                                     '{sd.StrFechaAlta}', '{montoSolicitado}', '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.StrUsuario.ToUpper()}', GETDATE(), 'INDIVIDUAL', '{sd.StrFechaAlta}', '{sd.StrFechaAlta}', '{sd.IdTipoContratoIndividual}',
                                     @idCiclo, @idPagos, '2', '{sd.IdCordinador}', '{sd.StrCordinador}','{sd.StrReferenciaBancaria}','{sd.StrBanco}','{sd.IntQuedateCasa}', '{sd.IdTipoVencimiento}', '{sd.StrTipoVencimiento}', 
                                     '1'
@@ -285,7 +282,7 @@ namespace Arkasis_API.Controllers
                 sd.StrProducto = "Mejora tu vivienda";
                 queries.Add($@"insert into arciced
                                     (solX001, solX003, solX004, solX005, solX006, cedLlave, cedX003, cedX004, cedX005, cedX006, cedX007, cedX008, cedX009, cedX010, cedX012, cedX013, cedX014, cedX015, cedX016, cedX019, cedX020, cedX021, cedX023, cedX024, cedX025, cedX026, cedX027, cedX028, cedX030, cedX031, cedX033, cedX034, cedX036, cedX037, cedX040, cedX046, cedX047, cedX048, cedX049, cedX054c, cedX054d, cedX301, cedX302, cedX303, cedX304,cedX189,cedX190, cedX197, cedX131,cedX029,cedX011,cedX191,cedX194, cedX120, cedX121, cedX122, cedX123, cedX124, cedX125, cedX132) values
-                                    ('{sd.IdSucursal}', '{sd.StrFechaAlta}', '1', 'EN TRAMITE', @idGrupo, @idCliente, '{sd.StrApellidoPaterno.ToUpper()}', '{sd.StrApellidoMaterno.ToUpper()}', '{sd.StrNombre1.ToUpper()}', '{sd.StrNombre2.ToUpper()}', '{sd.StrNombreCompleto.ToUpper()}', '{sd.StrDomicilio.ToUpper()}', '{sd.StrDomicilioNumExt.ToUpper()}', '{sd.StrDomicilioNumInt.ToUpper()}', '{sd.StrDomicilioColonia.ToUpper()}', '{sd.IdDomicilioEstado}', '{sd.StrDomicilioEstado}', '{sd.IdDomicilioMunicipio}', '{sd.StrDomicilioMunicipio}', '{sd.StrDomicilioCodigoPostal}', '{sd.StrTelefono}', '{sd.StrCelular}', '{sd.StrCURP.ToUpper()}', '{sd.StrPais.ToUpper()}', '{sd.StrEstadoNacimiento.ToUpper()}', '{sd.StrNacionalidad.ToUpper()}', '{sd.IdGenero}', '{sd.StrGenero}', '{sd.StrFechaNacimiento}', '{sd.IdEstadoCivil}', '{sd.StrNumeroINE}', '{sd.StrClaveINE}', '{sd.StrEmail.ToLower()}', '{sd.StrOcupacion.ToUpper()}', '{sd.StrActividad}', '{sd.StrNombreConyuge.ToUpper()}', '{sd.StrFechaNacimientoConyuge}', '{sd.StrLugarNacimientoConyuge.ToUpper()}', '{sd.StrOcupacionConyuge.ToUpper()}', '{sd.DblIngresos}', '{sd.DblEgresos}', '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.DblMontoSolicitadoMejoraVivienda}','{sd.DblMontoSolicitadoMejoraVivienda}', '{sd.StrProducto}', '{sd.StrCNBV}','1','1','{sd.IntPlazo}', @idPagos, '{sd.StrDomicilio_mejoraVivienda}', '{sd.StrNumExt_mejoraVivienda}', '{sd.StrNumInt_mejoraVivienda}', '{sd.StrColonia_mejoraVivienda}', '{sd.StrMunicipio_mejoraVivienda}', '{sd.StrCodigoPostal_mejoraVivienda}', '{sd.StrActividad}')");
+                                    ('{sd.IdSucursal}', '{sd.StrFechaAlta}', '1', 'EN TRAMITE', @idGrupo, @idCliente, '{sd.StrApellidoPaterno.ToUpper()}', '{sd.StrApellidoMaterno.ToUpper()}', '{sd.StrNombre1.ToUpper()}', '{sd.StrNombre2.ToUpper()}', '{sd.StrNombreCompleto.ToUpper()}', '{sd.StrDomicilio.ToUpper()}', '{sd.StrDomicilioNumExt.ToUpper()}', '{sd.StrDomicilioNumInt.ToUpper()}', '{sd.StrDomicilioColonia.ToUpper()}', '{sd.IdDomicilioEstado}', '{sd.StrDomicilioEstado}', '{sd.IdDomicilioMunicipio}', '{sd.StrDomicilioMunicipio}', '{sd.StrDomicilioCodigoPostal}', '{sd.StrTelefono}', '{sd.StrCelular}', '{sd.StrCURP.ToUpper()}', '{sd.StrPais.ToUpper()}', '{sd.StrEstadoNacimiento.ToUpper()}', '{sd.StrNacionalidad.ToUpper()}', '{sd.IdGenero}', '{sd.StrGenero}', '{sd.StrFechaNacimiento}', '{sd.IdEstadoCivil}', '{sd.StrNumeroINE}', '{sd.StrClaveINE}', '{sd.StrEmail.ToLower()}', '{sd.StrOcupacion.ToUpper()}', '{sd.StrActividad}', '{sd.StrNombreConyuge.ToUpper()}', '{sd.StrFechaNacimientoConyuge}', '{sd.StrLugarNacimientoConyuge.ToUpper()}', '{sd.StrOcupacionConyuge.ToUpper()}', '{sd.DblIngresos}', '{sd.DblEgresos}', '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.DblMontoSolicitadoMejoraVivienda}','{sd.DblMontoSolicitadoMejoraVivienda}', '{sd.StrProducto}', '{sd.StrCNBV}','1','1','{sd.DblPlazo}', @idPagos, '{sd.StrDomicilio_mejoraVivienda}', '{sd.StrNumExt_mejoraVivienda}', '{sd.StrNumInt_mejoraVivienda}', '{sd.StrColonia_mejoraVivienda}', '{sd.StrMunicipio_mejoraVivienda}', '{sd.StrCodigoPostal_mejoraVivienda}', '{sd.StrActividad}')");
             }
 
             if (sd.DblMontoSolicitadoEquipandoHogar > 0)
@@ -293,7 +290,7 @@ namespace Arkasis_API.Controllers
                 //sd.StrProducto = "MEJORA HOGAR";
                 queries.Add($@"insert into arciced
                                     (solX001, solX003, solX004, solX005, solX006, cedLlave, cedX003, cedX004, cedX005, cedX006, cedX007, cedX008, cedX009, cedX010, cedX012, cedX013, cedX014, cedX015, cedX016, cedX019, cedX020, cedX021, cedX023, cedX024, cedX025, cedX026, cedX027, cedX028, cedX030, cedX031, cedX033, cedX034, cedX036, cedX037, cedX040, cedX046, cedX047, cedX048, cedX049, cedX054c, cedX054d, cedX301, cedX302, cedX303, cedX304,cedX189,cedX190, cedX197, cedX131,cedX029,cedX011,cedX191,cedX194, cedX132) values
-                                    ('{sd.IdSucursal}', '{sd.StrFechaAlta}', '1', 'EN TRAMITE', @idGrupo, @idCliente, '{sd.StrApellidoPaterno.ToUpper()}', '{sd.StrApellidoMaterno.ToUpper()}', '{sd.StrNombre1.ToUpper()}', '{sd.StrNombre2.ToUpper()}', '{sd.StrNombreCompleto.ToUpper()}', '{sd.StrDomicilio.ToUpper()}', '{sd.StrDomicilioNumExt.ToUpper()}', '{sd.StrDomicilioNumInt.ToUpper()}', '{sd.StrDomicilioColonia.ToUpper()}', '{sd.IdDomicilioEstado}', '{sd.StrDomicilioEstado}', '{sd.IdDomicilioMunicipio}', '{sd.StrDomicilioMunicipio}', '{sd.StrDomicilioCodigoPostal}', '{sd.StrTelefono}', '{sd.StrCelular}', '{sd.StrCURP.ToUpper()}', '{sd.StrPais.ToUpper()}', '{sd.StrEstadoNacimiento.ToUpper()}', '{sd.StrNacionalidad.ToUpper()}', '{sd.IdGenero}', '{sd.StrGenero}', '{sd.StrFechaNacimiento}', '{sd.IdEstadoCivil}', '{sd.StrNumeroINE}', '{sd.StrClaveINE}', '{sd.StrEmail.ToLower()}', '{sd.StrOcupacion.ToUpper()}', '{sd.StrActividad}', '{sd.StrNombreConyuge.ToUpper()}', '{sd.StrFechaNacimientoConyuge}', '{sd.StrLugarNacimientoConyuge.ToUpper()}', '{sd.StrOcupacionConyuge.ToUpper()}', '{sd.DblIngresos}', '{sd.DblEgresos}', '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.DblMontoSolicitadoEquipandoHogar}','{sd.DblMontoSolicitadoEquipandoHogar}', '{sd.StrProducto}', '{sd.StrCNBV}','1','1','{sd.IntPlazo}', @idPagos, '{sd.StrActividad}')");
+                                    ('{sd.IdSucursal}', '{sd.StrFechaAlta}', '1', 'EN TRAMITE', @idGrupo, @idCliente, '{sd.StrApellidoPaterno.ToUpper()}', '{sd.StrApellidoMaterno.ToUpper()}', '{sd.StrNombre1.ToUpper()}', '{sd.StrNombre2.ToUpper()}', '{sd.StrNombreCompleto.ToUpper()}', '{sd.StrDomicilio.ToUpper()}', '{sd.StrDomicilioNumExt.ToUpper()}', '{sd.StrDomicilioNumInt.ToUpper()}', '{sd.StrDomicilioColonia.ToUpper()}', '{sd.IdDomicilioEstado}', '{sd.StrDomicilioEstado}', '{sd.IdDomicilioMunicipio}', '{sd.StrDomicilioMunicipio}', '{sd.StrDomicilioCodigoPostal}', '{sd.StrTelefono}', '{sd.StrCelular}', '{sd.StrCURP.ToUpper()}', '{sd.StrPais.ToUpper()}', '{sd.StrEstadoNacimiento.ToUpper()}', '{sd.StrNacionalidad.ToUpper()}', '{sd.IdGenero}', '{sd.StrGenero}', '{sd.StrFechaNacimiento}', '{sd.IdEstadoCivil}', '{sd.StrNumeroINE}', '{sd.StrClaveINE}', '{sd.StrEmail.ToLower()}', '{sd.StrOcupacion.ToUpper()}', '{sd.StrActividad}', '{sd.StrNombreConyuge.ToUpper()}', '{sd.StrFechaNacimientoConyuge}', '{sd.StrLugarNacimientoConyuge.ToUpper()}', '{sd.StrOcupacionConyuge.ToUpper()}', '{sd.DblIngresos}', '{sd.DblEgresos}', '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.StrUsuario.ToUpper()}', GETDATE(), '{sd.DblMontoSolicitadoEquipandoHogar}','{sd.DblMontoSolicitadoEquipandoHogar}', '{sd.StrProducto}', '{sd.StrCNBV}','1','1','{sd.DblPlazo}', @idPagos, '{sd.StrActividad}')");
             }
 
 
@@ -313,10 +310,28 @@ namespace Arkasis_API.Controllers
         }
 
 
-        private String getQueryInsertDocument(int index, SolicitudDispersion sd, String fileName, String fileDescription)
+        private String getQueryInsertDocument(int index, SolicitudDispersion sd, String fileDescription)
         {
             List<String> queries = new List<string>();
             String queriesString = "";
+
+            String fileName = $@"Doc_Digitalizacion/{sd.IdEmpresa}/{sd.IdSucursal}/";
+
+            switch(fileDescription)
+            {
+                case "INE FRONTAL":
+                    fileName += sd.StrFotoINEFrontal_nombre;
+                    break;
+                case "INE REVERSO":
+                    fileName += sd.StrFotoINEReverso_nombre;
+                    break;
+                case "FOTO PERFIL":
+                    fileName += sd.StrFotoPerfil_nombre;
+                    break;
+                case "COMPROBANTE DOMICILIO":
+                    fileName += sd.StrFotoComprobanteDomicilio_nombre;
+                    break;
+            }
 
             //Generamos el nuevo id del documento
             queries.Add($@"SET @idDoc = (SELECT CONCAT(@idClienteDOCS, IIF(@idLastDoc is null, '00{index}', RIGHT('000' + CAST( (CAST(@idLastDoc as int) + {index})  AS VARCHAR), 3)) ))");
@@ -333,11 +348,11 @@ namespace Arkasis_API.Controllers
             return queriesString;
         }
 
-        private String saveImage(String idSucursal, String idCliente, String base64String, String fileName)
+        private String saveImage(String idEmpresa, String idSucursal, String idCliente, String base64String, String fileName)
         {
             byte[] imageBytes = Convert.FromBase64String(base64String);
 
-            string directoryPath = Path.Combine("/ArkasisMicrocred_Pruebas", "Doc_Digitalizacion", idSucursal, ("CTE"+idCliente));
+            string directoryPath = Path.Combine("/ArkasisMicrocred_Pruebas", "Doc_Digitalizacion", idEmpresa, idSucursal, ("CTE"+idCliente));
 
             if (!Directory.Exists(directoryPath))
             {
@@ -349,6 +364,24 @@ namespace Arkasis_API.Controllers
             System.IO.File.WriteAllBytes(filePath, imageBytes);
 
             return fileName;
+        }
+
+        private String getIdEmpresaPorSucursal(ConexionSQL conexionSQL, String IdSucursal)
+        {
+            List<String> queries = new List<string>();
+            // Obtenemos el IdEmpresa
+            queries.Add($@"Select maex052 IdSucursal from arcimae where maeLlave = '{IdSucursal}'");
+            DataTable[] arrayResult = conexionSQL.EjecutarQueries(queries.ToArray());
+
+            if (arrayResult != null)
+            {
+                if (arrayResult[0].Rows.Count > 0)
+                {
+                    return arrayResult[0].Rows[0]["IdSucursal"].ToString();
+                }
+            }
+
+            return "";
         }
 
 
