@@ -222,6 +222,8 @@ namespace Arkasis_API.Controllers
             queries.Add("DECLARE @idSolicitudGrupo Integer");
             queries.Add("DECLARE @idCiclo Integer");
             queries.Add("DECLARE @idPagos Integer");
+            queries.Add("DECLARE @idEmpresaCTO NVARCHAR(50)");
+
             if (sd.IdCliente == "")
             {
 
@@ -335,8 +337,8 @@ namespace Arkasis_API.Controllers
             queries.Add($@"SET @idDoc = (SELECT CONCAT(@idClienteDOCS, IIF(@idLastDoc is null, '00{index}', RIGHT('000' + CAST( (CAST(@idLastDoc as int) + {index})  AS VARCHAR), 3)) ))");
 
             queries.Add($@"INSERT INTO ARCICTEdg 
-                    (dgsX001, dgsLlave, dgsX001c, dgsX003, dgsX004, dgsX006, dgsX007, dgsX009, dgsX301, dgsX302) VALUES
-                    ('{sd.IdSucursal}', @idDoc, @idCliente, '{fileName}', '{fileDescription}', 'Evidencia subida desde app', GETDATE(), 0, '{sd.StrUsuario}', GETDATE())");
+                    (dgsX001, dgsLlave, dgsX001c, dgsX003, dgsX004, dgsX006, dgsX007, dgsX009, dgsX301, dgsX302,dgsX010) VALUES
+                    ('{sd.IdSucursal}', @idDoc, @idCliente, '{fileName}', '{fileDescription}', 'Evidencia subida desde app', GETDATE(), 0, '{sd.StrUsuario}', GETDATE(),21)");
             
             foreach (String query in queries)
             {

@@ -175,7 +175,8 @@ namespace Arkasis_API.Controllers
                 @"select 
 	                maeLlave as IdSucursal,
 	                maeX010 as strClaveSucursal,
-	                maeX011 as strSucursal
+	                maeX011 as strSucursal,
+                    maeX052 as IdEmpresaCto
                 from arcimae";
 
             DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
@@ -246,11 +247,9 @@ namespace Arkasis_API.Controllers
             ConexionSQL conexionSQL = new ConexionSQL();
             String[] arrayConsultas = new string[1];
             arrayConsultas[0] =
-                @"SELECT 
-	                venLlave as IdCoordinador,
-	                venX001 as IdSucursal,
-	                venX003 as strNombre
-                FROM arciven;";
+                @"SELECT dbo.arciven.venLlave AS IdCoordinador, dbo.arciven.venX001 AS IdSucursal, dbo.arciven.venX003 AS strNombre, dbo.arcimae.maeX052 as idEmpresaCTo
+FROM     dbo.arciven INNER JOIN
+                  dbo.arcimae ON dbo.arciven.venX001 = dbo.arcimae.maeLlave;";
 
             DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
 
