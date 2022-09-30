@@ -13,7 +13,8 @@ namespace Arkasis_API.Models
         public String StrStatusSolicitud { get; set; }
         public String IdSucursal { get; set; }
 
-       
+        public String IdEmpresa { get; set; }
+
         public String idPromotor { get; set; }
         public String StrUsuario { get; set; }
         public String StrPromotor { get; set; }
@@ -57,7 +58,7 @@ namespace Arkasis_API.Models
         public String StrReferenciaBancaria { get; set; }
         public String StrBanco { get; set; }
         public String StrProducto { get; set; }
-        public Int32 IntPlazo { get; set; }
+        public Double DblPlazo { get; set; }
         public Int32 IntQuedateCasa { get; set; }
         public Double DblMontoSolicitadoMejoraVivienda { get; set; }
         public Double DblMontoSolicitadoEquipandoHogar { get; set; }
@@ -146,7 +147,7 @@ namespace Arkasis_API.Models
                 StrReferenciaBancaria = dataRow["StrReferenciaBancaria"] != null ? dataRow["StrReferenciaBancaria"].ToString() : "";
                 StrBanco = dataRow["StrBanco"] != null ? dataRow["StrBanco"].ToString() : "";
                 StrProducto = dataRow["StrProducto"] != null ? dataRow["StrProducto"].ToString() : "";
-                IntPlazo = dataRow["IntPlazo"] != null ? Convert.ToInt16(Double.Parse(dataRow["IntPlazo"].ToString())) : 0;
+                DblPlazo = dataRow["DblPlazo"] != null ? Double.Parse(dataRow["DblPlazo"].ToString()) : 0;
                 IntQuedateCasa = dataRow["IntQuedateCasa"] != null ? Convert.ToInt16(Double.Parse(dataRow["IntQuedateCasa"].ToString())) : 0;
                 DblMontoSolicitadoMejoraVivienda = dataRow["DblMontoSolicitadoMejoraVivienda"] != null ? Double.Parse(dataRow["DblMontoSolicitadoMejoraVivienda"].ToString()) : 0;
                 DblMontoSolicitadoEquipandoHogar = dataRow["DblMontoSolicitadoEquipandoHogar"] != null ? Double.Parse(dataRow["DblMontoSolicitadoEquipandoHogar"].ToString()) : 0;

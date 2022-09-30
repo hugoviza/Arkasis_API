@@ -264,7 +264,7 @@ namespace Arkasis_API.Controllers
 					grmX076 StrReferenciaBancaria,
 					grmX077 StrBanco,
 					case when cedX120 is null then COALESCE(cedX197,'') else '' END StrProducto,
-					COALESCE(cedX191,'0') IntPlazo,
+					COALESCE(cedX191,'0') DblPlazo,
 					COALESCE(grmX078, '0') IntQuedateCasa,
 					case when cedX120 is not null then COALESCE(cedX189,0) else 0 end as DblMontoSolicitadoMejoraVivienda,
 					case when cedX120 is null then COALESCE(cedX189,0) else 0 end as DblMontoSolicitadoEquipandoHogar,
@@ -292,7 +292,7 @@ namespace Arkasis_API.Controllers
 					gru.grmX015 IdTipoVencimiento,
 					gru.grmX016 StrTipoVencimiento,
 					gru.grmX011 IntNumPagos,
-					gru.grmX012 IntPlazo,
+					gru.grmX012 DblPlazo,
 					gru.grmX022 IdTipoContratoIndividual
 				FROM arciced as sol
 				JOIN arcigrm as gru on sol.solX006 = gru.grmX002
@@ -383,7 +383,7 @@ namespace Arkasis_API.Controllers
 					grmX076 StrReferenciaBancaria,
 					grmX077 StrBanco,
 					case when cedX120 is null then COALESCE(cedX197,'') else '' END StrProducto,
-					COALESCE(cedX191,'0') IntPlazo,
+					COALESCE(cedX191,'0') DblPlazo,
 					COALESCE(grmX078, '0') IntQuedateCasa,
 					case when cedX120 is not null then COALESCE(cedX189,0) else 0 end as DblMontoSolicitadoMejoraVivienda,
 					case when cedX120 is null then COALESCE(cedX189,0) else 0 end as DblMontoSolicitadoEquipandoHogar,
