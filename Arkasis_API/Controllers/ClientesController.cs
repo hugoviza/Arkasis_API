@@ -277,6 +277,9 @@ namespace Arkasis_API.Controllers
 					cedX121 StrNumExt_mejoraVivienda,
 					cedX122 StrNumInt_mejoraVivienda,
 					cedX123 StrColonia_mejoraVivienda,
+					grmX015 IdTipoVencimiento,
+					grmX016 StrTipoVencimiento,
+					grmX011 IntNumPagos,
 					'' IdEstado_mejoraVivienda,
 					'' StrEstado_mejoraVivienda,
 					'' IdMunicipio_mejoraVivienda,
@@ -396,6 +399,9 @@ namespace Arkasis_API.Controllers
 					cedX121 StrNumExt_mejoraVivienda,
 					cedX122 StrNumInt_mejoraVivienda,
 					cedX123 StrColonia_mejoraVivienda,
+					grmX015 IdTipoVencimiento,
+					grmX016 StrTipoVencimiento,
+					grmX011 IntNumPagos,
 					'' IdEstado_mejoraVivienda,
 					'' StrEstado_mejoraVivienda,
 					'' IdMunicipio_mejoraVivienda,
@@ -407,7 +413,8 @@ namespace Arkasis_API.Controllers
 					'' StrFotoPerfil_B64,
 					(SELECT top 1 dgsX003 FROM ARCICTEdg WHERE dgsX001c = sol.cedLlave AND dgsX004 = 'FOTO PERFIL' ) StrFotoPerfil_nombre,
 					'' StrFotoComprobanteDomicilio_B64,
-					(SELECT top 1 dgsX003 FROM ARCICTEdg WHERE dgsX001c = sol.cedLlave AND dgsX004 = 'COMPROBANTE DOMICILIO' ) StrFotoComprobanteDomicilio_nombre
+					(SELECT top 1 dgsX003 FROM ARCICTEdg WHERE dgsX001c = sol.cedLlave AND dgsX004 = 'COMPROBANTE DOMICILIO' ) StrFotoComprobanteDomicilio_nombre,
+					gru.grmX022 IdTipoContratoIndividual
 				FROM arciced as sol
 				JOIN arcigrm as gru on sol.solX006 = gru.grmX002
 				WHERE 

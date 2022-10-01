@@ -12,9 +12,12 @@ namespace Arkasis_API.Models
         public String StrFechaAlta { get; set; }
         public String StrStatusSolicitud { get; set; }
         public String IdSucursal { get; set; }
-
+<<<<<<<<< Temporary merge branch 1
         public String IdEmpresa { get; set; }
+=========
 
+       
+>>>>>>>>> Temporary merge branch 2
         public String idPromotor { get; set; }
         public String StrUsuario { get; set; }
         public String StrPromotor { get; set; }
@@ -100,81 +103,81 @@ namespace Arkasis_API.Models
         {
             if(dataRow != null)
             {
-                IdSolicitud = dataRow["IdSolicitud"] != null ? Int16.Parse(dataRow["IdSolicitud"].ToString()) : 0;
-                StrFechaAlta = dataRow["StrFechaAlta"] != null ? dataRow["StrFechaAlta"].ToString() : "";
-                StrStatusSolicitud = dataRow["StrStatusSolicitud"] != null ? dataRow["StrStatusSolicitud"].ToString() : "";
-                IdSucursal = dataRow["IdSucursal"] != null ? dataRow["IdSucursal"].ToString() : "";
-                idPromotor = dataRow["idPromotor"] != null ? dataRow["idPromotor"].ToString() : "";
-                StrUsuario = dataRow["StrUsuario"] != null ? dataRow["StrUsuario"].ToString() : "";
-                StrPromotor = dataRow["StrPromotor"] != null ? dataRow["StrPromotor"].ToString() : "";
-                IdCordinador = dataRow["IdCordinador"] != null ? dataRow["IdCordinador"].ToString() : "";
-                StrCordinador = dataRow["StrCordinador"] != null ? dataRow["StrCordinador"].ToString() : "";
-                IdCliente = dataRow["IdCliente"] != null ? dataRow["IdCliente"].ToString() : "";
-                StrApellidoPaterno = dataRow["StrApellidoPaterno"] != null ? dataRow["StrApellidoPaterno"].ToString() : "";
-                StrApellidoMaterno = dataRow["StrApellidoMaterno"] != null ? dataRow["StrApellidoMaterno"].ToString() : "";
-                StrNombre1 = dataRow["StrNombre1"] != null ? dataRow["StrNombre1"].ToString() : "";
-                StrNombre2 = dataRow["StrNombre2"] != null ? dataRow["StrNombre2"].ToString() : "";
-                StrFechaNacimiento = dataRow["StrFechaNacimiento"] != null ? dataRow["StrFechaNacimiento"].ToString() : "";
-                IdGenero = dataRow["IdGenero"] != null ? dataRow["IdGenero"].ToString() : "";
-                StrGenero = dataRow["StrGenero"] != null ? dataRow["StrGenero"].ToString() : "";
-                StrCURP = dataRow["StrCURP"] != null ? dataRow["StrCURP"].ToString() : "";
-                StrDomicilio = dataRow["StrDomicilio"] != null ? dataRow["StrDomicilio"].ToString() : "";
-                StrDomicilioCodigoPostal = dataRow["StrDomicilioCodigoPostal"] != null ? dataRow["StrDomicilioCodigoPostal"].ToString() : "";
-                StrDomicilioNumExt = dataRow["StrDomicilioNumExt"] != null ? dataRow["StrDomicilioNumExt"].ToString() : "";
-                StrDomicilioNumInt = dataRow["StrDomicilioNumInt"] != null ? dataRow["StrDomicilioNumInt"].ToString() : "";
-                StrDomicilioColonia = dataRow["StrDomicilioColonia"] != null ? dataRow["StrDomicilioColonia"].ToString() : "";
-                IdDomicilioEstado = dataRow["IdDomicilioEstado"] != null ? dataRow["IdDomicilioEstado"].ToString() : "";
-                StrDomicilioEstado = dataRow["StrDomicilioEstado"] != null ? dataRow["StrDomicilioEstado"].ToString() : "";
-                IdDomicilioMunicipio = dataRow["IdDomicilioMunicipio"] != null ? dataRow["IdDomicilioMunicipio"].ToString() : "";
-                StrDomicilioMunicipio = dataRow["StrDomicilioMunicipio"] != null ? dataRow["StrDomicilioMunicipio"].ToString() : "";
-                StrEstadoCivil = dataRow["StrEstadoCivil"] != null ? dataRow["StrEstadoCivil"].ToString() : "";
-                IdEstadoCivil = dataRow["IdEstadoCivil"] != null ? dataRow["IdEstadoCivil"].ToString() : "";
-                StrTelefono = dataRow["StrTelefono"] != null ? dataRow["StrTelefono"].ToString() : "";
-                StrCelular = dataRow["StrCelular"] != null ? dataRow["StrCelular"].ToString() : "";
-                StrOcupacion = dataRow["StrOcupacion"] != null ? dataRow["StrOcupacion"].ToString() : "";
-                IdActividad = dataRow["IdActividad"] != null ? dataRow["IdActividad"].ToString() : "";
-                StrActividad = dataRow["StrActividad"] != null ? dataRow["StrActividad"].ToString() : "";
-                StrNumeroINE = dataRow["StrNumeroINE"] != null ? dataRow["StrNumeroINE"].ToString() : "";
-                StrClaveINE = dataRow["StrClaveINE"] != null ? dataRow["StrClaveINE"].ToString() : "";
-                StrPais = dataRow["StrPais"] != null ? dataRow["StrPais"].ToString() : "";
-                StrEstadoNacimiento = dataRow["StrEstadoNacimiento"] != null ? dataRow["StrEstadoNacimiento"].ToString() : "";
-                StrNacionalidad = dataRow["StrNacionalidad"] != null ? dataRow["StrNacionalidad"].ToString() : "";
-                StrEmail = dataRow["StrEmail"] != null ? dataRow["StrEmail"].ToString() : "";
-                StrNombreConyuge = dataRow["StrNombreConyuge"] != null ? dataRow["StrNombreConyuge"].ToString() : "";
-                StrLugarNacimientoConyuge = dataRow["StrLugarNacimientoConyuge"] != null ? dataRow["StrLugarNacimientoConyuge"].ToString() : "";
-                StrFechaNacimientoConyuge = dataRow["StrFechaNacimientoConyuge"] != null ? dataRow["StrFechaNacimientoConyuge"].ToString() : "";
-                StrOcupacionConyuge = dataRow["StrOcupacionConyuge"] != null ? dataRow["StrOcupacionConyuge"].ToString() : "";
-                StrReferenciaBancaria = dataRow["StrReferenciaBancaria"] != null ? dataRow["StrReferenciaBancaria"].ToString() : "";
-                StrBanco = dataRow["StrBanco"] != null ? dataRow["StrBanco"].ToString() : "";
-                StrProducto = dataRow["StrProducto"] != null ? dataRow["StrProducto"].ToString() : "";
-                DblPlazo = dataRow["DblPlazo"] != null ? Double.Parse(dataRow["DblPlazo"].ToString()) : 0;
-                IntQuedateCasa = dataRow["IntQuedateCasa"] != null ? Convert.ToInt16(Double.Parse(dataRow["IntQuedateCasa"].ToString())) : 0;
-                DblMontoSolicitadoMejoraVivienda = dataRow["DblMontoSolicitadoMejoraVivienda"] != null ? Double.Parse(dataRow["DblMontoSolicitadoMejoraVivienda"].ToString()) : 0;
-                DblMontoSolicitadoEquipandoHogar = dataRow["DblMontoSolicitadoEquipandoHogar"] != null ? Double.Parse(dataRow["DblMontoSolicitadoEquipandoHogar"].ToString()) : 0;
-                DblIngresos = dataRow["DblIngresos"] != null ? Double.Parse(dataRow["DblIngresos"].ToString()) : 0;
-                DblEgresos = dataRow["DblEgresos"] != null ? Double.Parse(dataRow["DblEgresos"].ToString()) : 0;
-                StrCNBV = dataRow["StrCNBV"] != null ? dataRow["StrCNBV"].ToString() : "";
-                StrDomicilio_mejoraVivienda = dataRow["StrDomicilio_mejoraVivienda"] != null ? dataRow["StrDomicilio_mejoraVivienda"].ToString() : "";
-                StrCodigoPostal_mejoraVivienda = dataRow["StrCodigoPostal_mejoraVivienda"] != null ? dataRow["StrCodigoPostal_mejoraVivienda"].ToString() : "";
-                StrNumExt_mejoraVivienda = dataRow["StrNumExt_mejoraVivienda"] != null ? dataRow["StrNumExt_mejoraVivienda"].ToString() : "";
-                StrNumInt_mejoraVivienda = dataRow["StrNumInt_mejoraVivienda"] != null ? dataRow["StrNumInt_mejoraVivienda"].ToString() : "";
-                StrColonia_mejoraVivienda = dataRow["StrColonia_mejoraVivienda"] != null ? dataRow["StrColonia_mejoraVivienda"].ToString() : "";
-                IdEstado_mejoraVivienda = dataRow["IdEstado_mejoraVivienda"] != null ? dataRow["IdEstado_mejoraVivienda"].ToString() : "";
-                StrEstado_mejoraVivienda = dataRow["StrEstado_mejoraVivienda"] != null ? dataRow["StrEstado_mejoraVivienda"].ToString() : "";
-                IdMunicipio_mejoraVivienda = dataRow["IdMunicipio_mejoraVivienda"] != null ? dataRow["IdMunicipio_mejoraVivienda"].ToString() : "";
-                StrMunicipio_mejoraVivienda = dataRow["StrMunicipio_mejoraVivienda"] != null ? dataRow["StrMunicipio_mejoraVivienda"].ToString() : "";
-                StrFotoINEFrontal_B64 = dataRow["StrFotoINEFrontal_B64"] != null ? dataRow["StrFotoINEFrontal_B64"].ToString() : "";
-                StrFotoINEFrontal_nombre = dataRow["StrFotoINEFrontal_nombre"] != null ? dataRow["StrFotoINEFrontal_nombre"].ToString() : "";
-                StrFotoINEReverso_B64 = dataRow["StrFotoINEReverso_B64"] != null ? dataRow["StrFotoINEReverso_B64"].ToString() : "";
-                StrFotoINEReverso_nombre = dataRow["StrFotoINEReverso_nombre"] != null ? dataRow["StrFotoINEReverso_nombre"].ToString() : "";
-                StrFotoPerfil_B64 = dataRow["StrFotoPerfil_B64"] != null ? dataRow["StrFotoPerfil_B64"].ToString() : "";
-                StrFotoPerfil_nombre = dataRow["StrFotoPerfil_nombre"] != null ? dataRow["StrFotoPerfil_nombre"].ToString() : "";
-                StrFotoComprobanteDomicilio_B64 = dataRow["StrFotoComprobanteDomicilio_B64"] != null ? dataRow["StrFotoComprobanteDomicilio_B64"].ToString() : "";
-                StrFotoComprobanteDomicilio_nombre = dataRow["StrFotoComprobanteDomicilio_nombre"] != null ? dataRow["StrFotoComprobanteDomicilio_nombre"].ToString() : "";
-                IdTipoVencimiento = dataRow["IdTipoVencimiento"] != null ? Int32.Parse(dataRow["IdTipoVencimiento"].ToString()) : 0;
-                StrTipoVencimiento = dataRow["StrTipoVencimiento"] != null ? dataRow["StrTipoVencimiento"].ToString() : "";
-                IntNumPagos = dataRow["IntNumPagos"] != null ? Int32.Parse(dataRow["IntNumPagos"].ToString()) : 0;
-                IdTipoContratoIndividual = dataRow["IdTipoContratoIndividual"] != null ? dataRow["IdTipoContratoIndividual"].ToString() : "";
+                IdSolicitud = dataRow["IdSolicitud"].ToString() != "" ? Int16.Parse(dataRow["IdSolicitud"].ToString()) : 0;
+                StrFechaAlta = dataRow["StrFechaAlta"].ToString() != "" ? dataRow["StrFechaAlta"].ToString() : "";
+                StrStatusSolicitud = dataRow["StrStatusSolicitud"].ToString() != "" ? dataRow["StrStatusSolicitud"].ToString() : "";
+                IdSucursal = dataRow["IdSucursal"].ToString() != "" ? dataRow["IdSucursal"].ToString() : "";
+                idPromotor = dataRow["idPromotor"].ToString() != "" ? dataRow["idPromotor"].ToString() : "";
+                StrUsuario = dataRow["StrUsuario"].ToString() != "" ? dataRow["StrUsuario"].ToString() : "";
+                StrPromotor = dataRow["StrPromotor"].ToString() != "" ? dataRow["StrPromotor"].ToString() : "";
+                IdCordinador = dataRow["IdCordinador"].ToString() != "" ? dataRow["IdCordinador"].ToString() : "";
+                StrCordinador = dataRow["StrCordinador"].ToString() != "" ? dataRow["StrCordinador"].ToString() : "";
+                IdCliente = dataRow["IdCliente"].ToString() != "" ? dataRow["IdCliente"].ToString() : "";
+                StrApellidoPaterno = dataRow["StrApellidoPaterno"].ToString() != "" ? dataRow["StrApellidoPaterno"].ToString() : "";
+                StrApellidoMaterno = dataRow["StrApellidoMaterno"].ToString() != "" ? dataRow["StrApellidoMaterno"].ToString() : "";
+                StrNombre1 = dataRow["StrNombre1"].ToString() != "" ? dataRow["StrNombre1"].ToString() : "";
+                StrNombre2 = dataRow["StrNombre2"].ToString() != "" ? dataRow["StrNombre2"].ToString() : "";
+                StrFechaNacimiento = dataRow["StrFechaNacimiento"].ToString() != "" ? dataRow["StrFechaNacimiento"].ToString() : "";
+                IdGenero = dataRow["IdGenero"].ToString() != "" ? dataRow["IdGenero"].ToString() : "";
+                StrGenero = dataRow["StrGenero"].ToString() != "" ? dataRow["StrGenero"].ToString() : "";
+                StrCURP = dataRow["StrCURP"].ToString() != "" ? dataRow["StrCURP"].ToString() : "";
+                StrDomicilio = dataRow["StrDomicilio"].ToString() != "" ? dataRow["StrDomicilio"].ToString() : "";
+                StrDomicilioCodigoPostal = dataRow["StrDomicilioCodigoPostal"].ToString() != "" ? dataRow["StrDomicilioCodigoPostal"].ToString() : "";
+                StrDomicilioNumExt = dataRow["StrDomicilioNumExt"].ToString() != "" ? dataRow["StrDomicilioNumExt"].ToString() : "";
+                StrDomicilioNumInt = dataRow["StrDomicilioNumInt"].ToString() != "" ? dataRow["StrDomicilioNumInt"].ToString() : "";
+                StrDomicilioColonia = dataRow["StrDomicilioColonia"].ToString() != "" ? dataRow["StrDomicilioColonia"].ToString() : "";
+                IdDomicilioEstado = dataRow["IdDomicilioEstado"].ToString() != "" ? dataRow["IdDomicilioEstado"].ToString() : "";
+                StrDomicilioEstado = dataRow["StrDomicilioEstado"].ToString() != "" ? dataRow["StrDomicilioEstado"].ToString() : "";
+                IdDomicilioMunicipio = dataRow["IdDomicilioMunicipio"].ToString() != "" ? dataRow["IdDomicilioMunicipio"].ToString() : "";
+                StrDomicilioMunicipio = dataRow["StrDomicilioMunicipio"].ToString() != "" ? dataRow["StrDomicilioMunicipio"].ToString() : "";
+                StrEstadoCivil = dataRow["StrEstadoCivil"].ToString() != "" ? dataRow["StrEstadoCivil"].ToString() : "";
+                IdEstadoCivil = dataRow["IdEstadoCivil"].ToString() != "" ? dataRow["IdEstadoCivil"].ToString() : "";
+                StrTelefono = dataRow["StrTelefono"].ToString() != "" ? dataRow["StrTelefono"].ToString() : "";
+                StrCelular = dataRow["StrCelular"].ToString() != "" ? dataRow["StrCelular"].ToString() : "";
+                StrOcupacion = dataRow["StrOcupacion"].ToString() != "" ? dataRow["StrOcupacion"].ToString() : "";
+                IdActividad = dataRow["IdActividad"].ToString() != "" ? dataRow["IdActividad"].ToString() : "";
+                StrActividad = dataRow["StrActividad"].ToString() != "" ? dataRow["StrActividad"].ToString() : "";
+                StrNumeroINE = dataRow["StrNumeroINE"].ToString() != "" ? dataRow["StrNumeroINE"].ToString() : "";
+                StrClaveINE = dataRow["StrClaveINE"].ToString() != "" ? dataRow["StrClaveINE"].ToString() : "";
+                StrPais = dataRow["StrPais"].ToString() != "" ? dataRow["StrPais"].ToString() : "";
+                StrEstadoNacimiento = dataRow["StrEstadoNacimiento"].ToString() != "" ? dataRow["StrEstadoNacimiento"].ToString() : "";
+                StrNacionalidad = dataRow["StrNacionalidad"].ToString() != "" ? dataRow["StrNacionalidad"].ToString() : "";
+                StrEmail = dataRow["StrEmail"].ToString() != "" ? dataRow["StrEmail"].ToString() : "";
+                StrNombreConyuge = dataRow["StrNombreConyuge"].ToString() != "" ? dataRow["StrNombreConyuge"].ToString() : "";
+                StrLugarNacimientoConyuge = dataRow["StrLugarNacimientoConyuge"].ToString() != "" ? dataRow["StrLugarNacimientoConyuge"].ToString() : "";
+                StrFechaNacimientoConyuge = dataRow["StrFechaNacimientoConyuge"].ToString() != "" ? dataRow["StrFechaNacimientoConyuge"].ToString() : "";
+                StrOcupacionConyuge = dataRow["StrOcupacionConyuge"].ToString() != "" ? dataRow["StrOcupacionConyuge"].ToString() : "";
+                StrReferenciaBancaria = dataRow["StrReferenciaBancaria"].ToString() != "" ? dataRow["StrReferenciaBancaria"].ToString() : "";
+                StrBanco = dataRow["StrBanco"].ToString() != "" ? dataRow["StrBanco"].ToString() : "";
+                StrProducto = dataRow["StrProducto"].ToString() != "" ? dataRow["StrProducto"].ToString() : "";
+                DblPlazo = dataRow["DblPlazo"].ToString() != "" ? Double.Parse(dataRow["DblPlazo"].ToString()) : 0;
+                IntQuedateCasa = dataRow["IntQuedateCasa"].ToString() != "" ? Convert.ToInt16(Double.Parse(dataRow["IntQuedateCasa"].ToString())) : 0;
+                DblMontoSolicitadoMejoraVivienda = dataRow["DblMontoSolicitadoMejoraVivienda"].ToString() != "" ? Double.Parse(dataRow["DblMontoSolicitadoMejoraVivienda"].ToString()) : 0;
+                DblMontoSolicitadoEquipandoHogar = dataRow["DblMontoSolicitadoEquipandoHogar"].ToString() != "" ? Double.Parse(dataRow["DblMontoSolicitadoEquipandoHogar"].ToString()) : 0;
+                DblIngresos = dataRow["DblIngresos"].ToString() != "" ? Double.Parse(dataRow["DblIngresos"].ToString()) : 0;
+                DblEgresos = dataRow["DblEgresos"].ToString() != "" ? Double.Parse(dataRow["DblEgresos"].ToString()) : 0;
+                StrCNBV = dataRow["StrCNBV"].ToString() != "" ? dataRow["StrCNBV"].ToString() : "";
+                StrDomicilio_mejoraVivienda = dataRow["StrDomicilio_mejoraVivienda"].ToString() != "" ? dataRow["StrDomicilio_mejoraVivienda"].ToString() : "";
+                StrCodigoPostal_mejoraVivienda = dataRow["StrCodigoPostal_mejoraVivienda"].ToString() != "" ? dataRow["StrCodigoPostal_mejoraVivienda"].ToString() : "";
+                StrNumExt_mejoraVivienda = dataRow["StrNumExt_mejoraVivienda"].ToString() != "" ? dataRow["StrNumExt_mejoraVivienda"].ToString() : "";
+                StrNumInt_mejoraVivienda = dataRow["StrNumInt_mejoraVivienda"].ToString() != "" ? dataRow["StrNumInt_mejoraVivienda"].ToString() : "";
+                StrColonia_mejoraVivienda = dataRow["StrColonia_mejoraVivienda"].ToString() != "" ? dataRow["StrColonia_mejoraVivienda"].ToString() : "";
+                IdEstado_mejoraVivienda = dataRow["IdEstado_mejoraVivienda"].ToString() != "" ? dataRow["IdEstado_mejoraVivienda"].ToString() : "";
+                StrEstado_mejoraVivienda = dataRow["StrEstado_mejoraVivienda"].ToString() != "" ? dataRow["StrEstado_mejoraVivienda"].ToString() : "";
+                IdMunicipio_mejoraVivienda = dataRow["IdMunicipio_mejoraVivienda"].ToString() != "" ? dataRow["IdMunicipio_mejoraVivienda"].ToString() : "";
+                StrMunicipio_mejoraVivienda = dataRow["StrMunicipio_mejoraVivienda"].ToString() != "" ? dataRow["StrMunicipio_mejoraVivienda"].ToString() : "";
+                StrFotoINEFrontal_B64 = dataRow["StrFotoINEFrontal_B64"].ToString() != "" ? dataRow["StrFotoINEFrontal_B64"].ToString() : "";
+                StrFotoINEFrontal_nombre = dataRow["StrFotoINEFrontal_nombre"].ToString() != "" ? dataRow["StrFotoINEFrontal_nombre"].ToString() : "";
+                StrFotoINEReverso_B64 = dataRow["StrFotoINEReverso_B64"].ToString() != "" ? dataRow["StrFotoINEReverso_B64"].ToString() : "";
+                StrFotoINEReverso_nombre = dataRow["StrFotoINEReverso_nombre"].ToString() != "" ? dataRow["StrFotoINEReverso_nombre"].ToString() : "";
+                StrFotoPerfil_B64 = dataRow["StrFotoPerfil_B64"].ToString() != "" ? dataRow["StrFotoPerfil_B64"].ToString() : "";
+                StrFotoPerfil_nombre = dataRow["StrFotoPerfil_nombre"].ToString() != "" ? dataRow["StrFotoPerfil_nombre"].ToString() : "";
+                StrFotoComprobanteDomicilio_B64 = dataRow["StrFotoComprobanteDomicilio_B64"].ToString() != "" ? dataRow["StrFotoComprobanteDomicilio_B64"].ToString() : "";
+                StrFotoComprobanteDomicilio_nombre = dataRow["StrFotoComprobanteDomicilio_nombre"].ToString() != "" ? dataRow["StrFotoComprobanteDomicilio_nombre"].ToString() : "";
+                IdTipoVencimiento = dataRow["IdTipoVencimiento"].ToString() != "" ? Int32.Parse(dataRow["IdTipoVencimiento"].ToString()) : 0;
+                StrTipoVencimiento = dataRow["StrTipoVencimiento"].ToString() != "" ? dataRow["StrTipoVencimiento"].ToString() : "";
+                IntNumPagos = dataRow["IntNumPagos"].ToString() != "" ? Int32.Parse(dataRow["IntNumPagos"].ToString()) : 0;
+                IdTipoContratoIndividual = dataRow["IdTipoContratoIndividual"].ToString() != "" ? dataRow["IdTipoContratoIndividual"].ToString() : "";
             }
         }
     }
