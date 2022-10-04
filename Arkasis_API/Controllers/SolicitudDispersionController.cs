@@ -129,8 +129,8 @@ namespace Arkasis_API.Controllers
                 $@"select 
 	                cedX301 as strUsuario, 
 	                sum(case when solX004 = 1 then 1 else 0 end) as IntTotalTramite,
-	                sum(case when solX004 = 2 then 1 else 0 end) as IntTotalAutorizado,
-	                sum(case when solX004 = 3 then 1 else 0 end) as IntTotalRechazado,
+	                sum(case when solX004 = 2 then 1 else 0 end) as IntTotalRechazado,
+	                sum(case when solX004 = 3 then 1 else 0 end) as IntTotalAutorizado,
 	                sum(case when solX004 = 4 then 1 else 0 end) as IntTotalCancelado,
 	                sum(case when solX004 = 5 then 1 else 0 end) as IntTotalMinistrado,
 	                count(*) IntTotalRegistros
