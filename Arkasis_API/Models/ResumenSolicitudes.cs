@@ -21,6 +21,7 @@ namespace Arkasis_API.Models
             this.IntTotalAutorizado = Int16.Parse(dataRow["IntTotalAutorizado"].ToString());
             this.IntTotalRechazado = Int16.Parse(dataRow["IntTotalRechazado"].ToString());
             this.IntTotalCancelado = Int16.Parse(dataRow["IntTotalCancelado"].ToString());
+            this.IntTotalMinistrado = Int16.Parse(dataRow["IntTotalMinistrado"].ToString());
             this.IntTotalRegistros = Int16.Parse(dataRow["IntTotalRegistros"].ToString());
         }
     }
