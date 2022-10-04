@@ -238,9 +238,9 @@ namespace Arkasis_API.Controllers
             }
             else
             {
-                queries.Add($@"SET @idCliente = {sd.IdCliente}");
+                queries.Add($@"SET @idCliente = (select RIGHT('000000' + CAST('{sd.IdCliente}' AS VARCHAR), 7))");
                 queries.Add($@"SET @idClienteDOCS = (select RIGHT('000000' + CAST('{sd.IdCliente}' AS VARCHAR), 7))");
-                queries.Add($@"SET @idGrupo = (select top 1 cteX041 from arcicte where cteLlave = {sd.IdCliente})");
+                queries.Add($@"SET @idGrupo = (select top 1 RIGHT('000000' + CAST(cteX041 AS VARCHAR), 7)  from arcicte where cteLlave = {sd.IdCliente})");
                 queries.Add($@"SET @idCiclo = (select top 1 gruX009 from arcigru where gruLlave = @idGrupo)");
                 queries.Add($@"SET @idPagos = {sd.IntNumPagos}");
             }
@@ -315,7 +315,7 @@ namespace Arkasis_API.Controllers
             List<String> queries = new List<string>();
             String queriesString = "";
 
-            String fileName = $@"Doc_Digitalizacion/{sd.IdEmpresa}/{sd.IdSucursal}/";
+            String fileName = "";
 
             switch(fileDescription)
             {
@@ -338,7 +338,7 @@ namespace Arkasis_API.Controllers
 
             queries.Add($@"INSERT INTO ARCICTEdg 
                     (dgsX001, dgsLlave, dgsX001c, dgsX003, dgsX004, dgsX006, dgsX007, dgsX009, dgsX301, dgsX302,dgsX010) VALUES
-                    ('{sd.IdSucursal}', @idDoc, @idCliente, '{fileName}', '{fileDescription}', 'Evidencia subida desde app', GETDATE(), 0, '{sd.StrUsuario}', GETDATE(),21)");
+                    ('{sd.IdSucursal}', @idDoc, @idCliente, '{fileName}', '{fileDescription}', 'Evidencia subida desde app', GETDATE(), 0, '{sd.StrUsuario}', GETDATE(),'{sd.IdEmpresa}')");
             
             foreach (String query in queries)
             {
@@ -352,7 +352,7 @@ namespace Arkasis_API.Controllers
         {
             byte[] imageBytes = Convert.FromBase64String(base64String);
 
-            string directoryPath = Path.Combine("/ArkasisMicrocred_Pruebas", "Doc_Digitalizacion", idEmpresa, idSucursal, ("CTE"+idCliente));
+            string directoryPath = Path.Combine("/SISTEMAS/ArkasisMicrocred_Pruebas", "Doc_Digitalizacion", idEmpresa, idSucursal, ("CTE"+idCliente));
 
             if (!Directory.Exists(directoryPath))
             {
