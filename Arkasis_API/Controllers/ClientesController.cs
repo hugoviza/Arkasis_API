@@ -165,22 +165,11 @@ namespace Arkasis_API.Controllers
 			ConexionSQL conexionSQL = new ConexionSQL();
 			String[] arrayConsultas = new string[1];
 			arrayConsultas[0] =
-				$@"SELECT top  100
-					arcicte.cteX023 as strCurp,
-					arciaux.auxX041 AS strFolioContrato, 
-					replace(convert(varchar, arciaux.auxX004, 111), '/','-') AS datFechaMinistracion, 
-					replace(convert(varchar, arciaux.auxX005, 111), '/','-') AS datFechaVencimiento, 
-					arciaux.auxX017 AS intTotalPagos, 
-					arciaux.auxX008 AS dblCapital,
-					arciaux.auxX009 AS dblIntereses, 
-					arciaux.auxX009h AS dblSeguro, 
-					arciaux.auxX010 AS dblTotal, 
-					arciaux.auxX012 AS dblAbono,
-					arciaux.auxX013 AS dblSaldo,
-					arciaux.auxX032 AS strProducto 
-					FROM 
-					arcicte 
-				INNER JOIN arciaux ON arcicte.cteX023 = arciaux.auxX023x 
+				$@"SELECT dbo.arcicte.cteX023 AS strCurp, dbo.arciaux.auxX041 AS strFolioContrato, REPLACE(CONVERT(varchar, dbo.arciaux.auxX004, 111), '/', '-') AS datFechaMinistracion, REPLACE(CONVERT(varchar, dbo.arciaux.auxX005, 111), '/', '-') 
+                  AS datFechaVencimiento, dbo.arciaux.auxX017 AS intTotalPagos, dbo.arciaux.auxX008 AS dblCapital, dbo.arciaux.auxX009 AS dblIntereses, dbo.arciaux.auxX009h AS dblSeguro, dbo.arciaux.auxX010 AS dblTotal, 
+                  dbo.arciaux.auxX012 AS dblAbono, dbo.arciaux.auxX013 AS dblSaldo, dbo.arciaux.auxX033c AS strProducto
+FROM     dbo.arcicte INNER JOIN
+                  dbo.arciaux ON dbo.arcicte.cteLlave = dbo.arciaux.auxX002 
 				WHERE (arcicte.cteX023 = '{cliente.StrCurp}')";
 
 			DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
