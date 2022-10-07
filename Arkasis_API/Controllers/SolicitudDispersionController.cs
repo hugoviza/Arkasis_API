@@ -163,7 +163,7 @@ namespace Arkasis_API.Controllers
             List<String> queries = new List<string>();
 
             //Validamos la curp del cliente
-            queries.Add($@"select cteLlave as IdCliente from arcicte where cteX023 like '%{sd.StrCURP}%'");
+            queries.Add($@"select cteLlave as IdCliente from arcicte where cteX023 COLLATE SQL_Latin1_General_Cp1_CI_AI like '%{sd.StrCURP}%'");
             DataTable[] arrayResult = conexionSQL.EjecutarQueries(queries.ToArray());
 
             if (arrayResult != null)

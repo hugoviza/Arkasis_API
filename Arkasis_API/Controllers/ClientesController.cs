@@ -56,8 +56,8 @@ namespace Arkasis_API.Controllers
 					cteX037 as StrOcupacion
 				FROM arcicte
 				WHERE 
-				concat(cteX016, ' ', cteX014) like '%{cliente.StrMunicipio.Replace("'", "%").Replace(" ", "%")}%{cliente.StrEstado.Replace("'", "%").Replace(" ", "%")}%'
-				AND CONCAT(cteX023, ' ', cteX034, ' ' ,cteX005, ' ', cteX006, ' ', cteX003, ' ', cteX003) like '%{cliente.StrNombre1.Replace("'", "%").Replace(" ", "%")}%'
+				concat(cteX016, ' ', cteX014) COLLATE SQL_Latin1_General_Cp1_CI_AI like '%{cliente.StrMunicipio.Replace("'", "%").Replace(" ", "%")}%{cliente.StrEstado.Replace("'", "%").Replace(" ", "%")}%'
+				AND CONCAT(cteX023, ' ', cteX034, ' ' ,cteX005, ' ', cteX006, ' ', cteX003, ' ', cteX003) COLLATE SQL_Latin1_General_Cp1_CI_AI like '%{cliente.StrNombre1.Replace("'", "%").Replace(" ", "%")}%'
 				order by CONCAT(cteX005, ' ', cteX006, ' ', cteX003, ' ', cteX003)";
 
             DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
@@ -289,8 +289,8 @@ FROM     dbo.arcicte INNER JOIN
 				FROM arciced as sol
 				JOIN arcigrm as gru on sol.solX006 = gru.grmX002
 				WHERE 
-					concat(cedX016, ' ', cedX014) like '%{cliente.StrMunicipio.Replace("'", "%").Replace(" ", "%")}%{cliente.StrEstado.Replace("'", "%").Replace(" ", "%")}%'
-					AND CONCAT(cedX003, ' ', cedX004, ' ' ,cedX005, ' ', cedX006, ' ', cedX023, ' ', cedX034) like '%{cliente.StrNombre1.Replace("'", "%").Replace(" ", "%")}%'
+					concat(cedX016, ' ', cedX014) COLLATE SQL_Latin1_General_Cp1_CI_AI like '%{cliente.StrMunicipio.Replace("'", "%").Replace(" ", "%")}%{cliente.StrEstado.Replace("'", "%").Replace(" ", "%")}%'
+					AND CONCAT(cedX003, ' ', cedX004, ' ' ,cedX005, ' ', cedX006, ' ', cedX023, ' ', cedX034) COLLATE SQL_Latin1_General_Cp1_CI_AI like '%{cliente.StrNombre1.Replace("'", "%").Replace(" ", "%")}%'
 				;";
 
 			DataTable[] arrayResult = conexionSQL.EjecutarQueries(arrayConsultas);
